@@ -24,6 +24,7 @@
   weight: 8
   startingGear: CoordinatorGear
   alwaysUseSpawner: true
+  whitelisted: true # Rat
   requireAdminNotify: true
   icon: "JobIconSyndieCoordinator"
   supervisors: You answer to the interests of the Interdyne Pharmaceuticals company. Organize your employees. Secure stakeholders and profit.
@@ -33,7 +34,6 @@
       inverted: true
       species:
         - Voidborn
-    - !type:CharacterWhitelistRequirement
     - !type:CharacterOverallTimeRequirement
       min: 20000
     - !type:FactionRequirement

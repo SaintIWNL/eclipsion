@@ -52,3 +52,40 @@
     - JetpackBlackFilled
     - ClothingShoesBootsMagCombat
     - Stunbaton
+
+- type: entity
+  id: CMVendorBundleCorpSecApparel
+  name: базовое снаряжение корпоративной охраны
+  description: базовое снаряжение агентов службы корпоративной безопасности Шиногары. Включает в себя ГПС, джетпак, магнитные сапоги и остальное.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite:  _Crescent/Structures/syndicatearmory.rsi
+    state: "off"
+  - type: CMVendorBundle
+    bundle:
+    - ClothingHandsGlovesCombat
+    - ClothingMaskGasSecurity
+    - HandheldGPSBasic
+    - DoubleEmergencyOxygenTankFilled
+    - JetpackBlackFilled
+    - ClothingShoesBootsMagCombat
+    - Stunbaton
+
+- type: entity
+  id: CMVendorBundleGSCApparel
+  name: базовое снаряжение вольного наёмника
+  description: базовое снаряжение вольных наёмников Горлекс. Включает в себя ГПС, джетпак, магнитные сапоги и остальное.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite:  _Crescent/Structures/syndicatearmory.rsi
+    state: "off"
+  - type: CMVendorBundle
+    bundle:
+    - ClothingHandsGlovesCombat
+    - ClothingMaskGasSyndicate
+    - HandheldGPSBasic
+    - DoubleEmergencyOxygenTankFilled
+    - JetpackBlackFilled
+    - ClothingShoesBootsMagSyndie
