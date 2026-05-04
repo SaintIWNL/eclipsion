@@ -71,7 +71,7 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Heat: 120
+        Heat: 90
   - type: ProjectileIFF
     visualType: Circle
     color: Red
@@ -98,7 +98,7 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Heat: 250
+        Heat: 200
   - type: ProjectileIFF
     visualType: Circle
     color: Red
