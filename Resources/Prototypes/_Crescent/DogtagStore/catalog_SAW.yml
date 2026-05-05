@@ -86,7 +86,7 @@
   id: StoreListing240mmcannon
   name: 240mm 'Gargoyle' heavy torpedo launcher system
   description: Parts used to build a 240mm 'Gargoyle' heavy torpedo launcher system. Activate with a multitool to deploy.
-  icon: { sprite: _Crescent/Objects/Turrets/Missile/gargoyle.rsi/, state: gargoyle }
+  icon: { sprite: _Crescent/Objects/Turrets/Missile/gargoyle.rsi, state: gargoyle }
   productEntity: BaseWeaponTurretNewGargoyleFlatpack
   cost:
     ScrapSAW: 90
