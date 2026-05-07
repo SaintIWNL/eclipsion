@@ -186,10 +186,12 @@ namespace Content.Client.PDA
                 ("instructions", _instructions))
             );
 
-            var coordinates = state.Coordinates;
+            var coordinates = state.Coordinates ?? Loc.GetString("comp-pda-ui-unknown");
 
             CoordinatesLabel.SetMarkup(Loc.GetString("comp-pda-ui-coordinates",
                     ("coordinates", coordinates)));
+
+            _coordinates = state.Coordinates?.ToString() ?? Loc.GetString("comp-pda-ui-unknown");
 
             AddressLabel.Text = state.Address?.ToUpper() ?? " - ";
 
