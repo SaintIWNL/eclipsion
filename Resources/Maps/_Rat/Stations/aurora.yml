@@ -156542,7 +156542,7 @@ entities:
     - type: Transform
       pos: 2.2944124,36.201576
       parent: 1
-- proto: ShipVoucherMagnate
+- proto: ShipVoucherPraetorian
   entities:
   - uid: 14106
     components:

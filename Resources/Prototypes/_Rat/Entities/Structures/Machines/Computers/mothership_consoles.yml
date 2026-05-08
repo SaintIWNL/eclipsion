@@ -190,6 +190,7 @@
     - Krechet
     - Psoglav
     - Lodka
+    - Hind
     - Vasinya
 
 - type: entity
@@ -245,7 +246,7 @@
     - Gnosis
     - Praxis
     - Praetorian
-    #- Torturer
+    - Laelaps
 
 - type: entity
   id: RatNemesisMothershipComputer
@@ -431,6 +432,8 @@
   components:
   - type: ShipyardListing
     shuttles:
+    - Alkhuld
+    - Beelzebub
     - Lucifer
     - Fadeem
 

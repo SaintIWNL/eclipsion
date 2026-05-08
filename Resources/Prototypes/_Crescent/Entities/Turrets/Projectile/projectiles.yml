@@ -16,7 +16,7 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 50
+        Structural: 80
         Piercing: 100
   - type: PointLight
     radius: 3.5

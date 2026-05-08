@@ -40,7 +40,7 @@
   - type: HeatSeeking
     rotationSpeed: 18 # fighter killer for security ships
     acceleration: 120
-    topSpeed: 130
+    topSpeed: 110
     fieldOfView: 30
     defaultSeekingRange: 800
     guidanceAlgorithm: PredictiveGuidance
@@ -112,7 +112,7 @@
   - type: HeatSeeking
     rotationSpeed: 10 # slow rotation so it isnt aimbot, still fairly accurate though
     acceleration: 90
-    topSpeed: 140
+    topSpeed: 110
     fieldOfView: 15
     defaultSeekingRange: 400
     guidanceAlgorithm: PurePursuit
@@ -210,7 +210,7 @@
   - type: HeatSeeking
     rotationSpeed: 7
     acceleration: 90
-    topSpeed: 140
+    topSpeed: 90
     fieldOfView: 30
     defaultSeekingRange: 1200
     guidanceAlgorithm: PurePursuit
@@ -247,7 +247,7 @@
   - type: HeatSeeking
     rotationSpeed: 3
     acceleration: 90
-    topSpeed: 140
+    topSpeed: 90
     fieldOfView: 30
     defaultSeekingRange: 1200
     guidanceAlgorithm: PurePursuit
@@ -284,7 +284,7 @@
   - type: HeatSeeking
     rotationSpeed: 5
     acceleration: 90
-    topSpeed: 140
+    topSpeed: 90
     fieldOfView: 30
     defaultSeekingRange: 1200
     guidanceAlgorithm: PurePursuit
@@ -321,7 +321,7 @@
   - type: HeatSeeking
     rotationSpeed: 30
     acceleration: 60
-    topSpeed: 180
+    topSpeed: 90
     fieldOfView: 10
     defaultSeekingRange: 850
     guidanceAlgorithm: PurePursuit
@@ -369,7 +369,7 @@
   - type: HeatSeeking
     rotationSpeed: 10
     acceleration: 45
-    topSpeed: 160
+    topSpeed: 110
     fieldOfView: 30
     defaultSeekingRange: 2000
     guidanceAlgorithm: PredictiveGuidance
@@ -440,7 +440,7 @@
   - type: HeatSeeking
     rotationSpeed: 4
     acceleration: 45
-    topSpeed: 150
+    topSpeed: 100
     fieldOfView: 30
     defaultSeekingRange: 2000
     guidanceAlgorithm: PredictiveGuidance
@@ -511,7 +511,7 @@
   - type: HeatSeeking
     rotationSpeed: 2
     acceleration: 75
-    topSpeed: 180
+    topSpeed: 130
     fieldOfView: 30
     defaultSeekingRange: 1000
     guidanceAlgorithm: PredictiveGuidance
@@ -608,7 +608,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 750
+        damage: 350
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
@@ -644,7 +644,7 @@
     explosionType: Default
     maxIntensity: 750
     intensitySlope: 50
-    totalIntensity: 14000
+    totalIntensity: 19000
     maxTileBreak: 16
   - type: PointLight
     radius: 3.5
@@ -680,7 +680,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 900 #its a very slow and not agile missile
+        damage: 400 #its a very slow and not agile missile
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
@@ -714,6 +714,7 @@
     layers:
       - state: catapult
   - type: ExplodeOnTrigger
+  - type: IgnoresHullrotShields
   - type: Explosive
     explosionType: Default
     maxIntensity: 23000
@@ -730,7 +731,7 @@
   - type: HeatSeeking
     rotationSpeed: 8
     acceleration: 10
-    topSpeed: 200
+    topSpeed: 130
     fieldOfView: 10
     defaultSeekingRange: 5000
     guidanceAlgorithm: PredictiveGuidance
@@ -754,12 +755,11 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 750 #harder to shoot down than a gargoyle still
+        damage: 500 #harder to shoot down than a gargoyle still
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
       - !type:ExplodeBehavior
-  - type: IgnoresHullrotShields
 
 #pila
 
