@@ -67,7 +67,7 @@ namespace Content.Server.VendingMachines
 
             SubscribeLocalEvent<VendingMachineComponent, RestockDoAfterEvent>(OnDoAfter);
 
-            SubscribeLocalEvent<VendingMachineRestockComponent, PriceCalculationEvent>(OnPriceCalculation);
+            //SubscribeLocalEvent<VendingMachineRestockComponent, PriceCalculationEvent>(OnPriceCalculation); //Rat-edit
         }
 
         private void OnComponentMapInit(EntityUid uid, VendingMachineComponent component, MapInitEvent args)
