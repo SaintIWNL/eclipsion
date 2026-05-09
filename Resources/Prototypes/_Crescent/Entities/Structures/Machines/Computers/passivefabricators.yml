@@ -53,15 +53,15 @@
 - type: entityList
   id: autodiskDropTable
   entities:
+  - ResearchDisk10000
+  - ResearchDisk5000
+  - ResearchDisk5000
+  - ResearchDisk5000
   - ResearchDisk
-  - ResearchDisk5000
-  - ResearchDisk5000
-  - ResearchDisk5000
-  - ResearchDisk1000
-  - ResearchDisk1000
-  - ResearchDisk1000
-  - ResearchDisk1000
-  - ResearchDisk1000
+  - ResearchDisk
+  - ResearchDisk
+  - ResearchDisk
+  - ResearchDisk
 
 - type: entity
   parent: PassiveSpawnerDebugPrototype
