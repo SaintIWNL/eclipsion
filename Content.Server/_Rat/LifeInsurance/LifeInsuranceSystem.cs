@@ -396,13 +396,21 @@ public sealed class LifeInsuranceSystem : EntitySystem
             if (session.AttachedEntity is not { } playerUid)
                 continue;
 
-            if (_station.GetOwningStation(playerUid) != consoleStation)
-                continue;
-
             if (!_mind.TryGetMind(playerUid, out var mindId, out _))
                 continue;
 
             var life = EnsureComp<LifeInsuranceComponent>(mindId);
+
+            // Pending payout is tied to the station stored at death — not where the ghost wanders after.
+            if (life.PendingRespawnAt != null && life.PendingRespawnStation is { } payoutStation)
+            {
+                if (payoutStation != consoleStation)
+                    continue;
+            }
+            else if (_station.GetOwningStation(playerUid) != consoleStation)
+            {
+                continue;
+            }
 
             var isGhostPending = TryComp<GhostComponent>(playerUid, out _) && life.PendingRespawnAt != null;
             var isAlive = TryComp<MobStateComponent>(playerUid, out var mobState)
@@ -450,8 +458,12 @@ public sealed class LifeInsuranceSystem : EntitySystem
 
     private static int GetCurrentPrice(int basePrice, int respawnCount)
     {
-        var multiplier = 1 << Math.Clamp(respawnCount, 0, 30);
-        return basePrice * multiplier;
+        var clamped = Math.Clamp(respawnCount, 0, 30);
+        long multiplier = 1L << clamped;
+        var total = (long)basePrice * multiplier;
+        if (total >= int.MaxValue)
+            return int.MaxValue;
+        return (int)total;
     }
 
     private void SetInsuranceOnGhost(EntityUid ghostUid, TimeSpan respawnAt, GhostComponent? ghost = null)
