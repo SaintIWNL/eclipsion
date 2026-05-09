@@ -1,0 +1,31 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      SetSize="700 430">
+    <BoxContainer Orientation="Vertical" Margin="8 8 8 8">
+        <BoxContainer Orientation="Horizontal" Margin="0 0 0 6">
+            <Label Name="ProteinsLabel" HorizontalExpand="True" VerticalAlignment="Center" />
+            <Button Name="EjectButton" Text="{Loc life-insurance-eject-proteins}" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" MinWidth="340" HorizontalExpand="True">
+                <LineEdit Name="SearchLine" PlaceHolder="{Loc life-insurance-search-placeholder}" />
+                <ScrollContainer VerticalExpand="True" Margin="0 6 6 0">
+                    <ItemList Name="PlayersList" SelectMode="Button" />
+                </ScrollContainer>
+            </BoxContainer>
+            <PanelContainer MinWidth="300" HorizontalExpand="True" Margin="6 0 0 0">
+                <BoxContainer Orientation="Vertical" Margin="8 8 8 8">
+                    <Label Name="DetailsTitle" Text="{Loc life-insurance-details-title}" />
+                    <Control MinHeight="6" />
+                    <Label Name="DetailsName" />
+                    <Label Name="DetailsRole" />
+                    <Label Name="DetailsStatus" />
+                    <Label Name="DetailsQuoteText" Margin="0 12 0 0" Visible="False" />
+                    <Control VerticalExpand="True" />
+                    <Button Name="InsureButton" Text="{Loc life-insurance-insure-button}" />
+                    <Button Name="VoidButton" Text="{Loc life-insurance-void-button}" Margin="0 6 0 0" />
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
+    </BoxContainer>
+</controls:FancyWindow>

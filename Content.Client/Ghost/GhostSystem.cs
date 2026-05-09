@@ -1,5 +1,6 @@
 using Content.Client.Movement.Systems;
 using Content.Shared.Actions;
+using Content.Shared.GameTicking;
 using Content.Shared.Ghost;
 using Robust.Client.Console;
 using Robust.Client.GameObjects;
@@ -17,6 +18,8 @@ namespace Content.Client.Ghost
         [Dependency] private readonly ContentEyeSystem _contentEye = default!;
 
         public int AvailableGhostRoleCount { get; private set; }
+        public bool InsuranceRespawnAvailable { get; private set; }
+        public TimeSpan InsuranceRespawnAt { get; private set; } = TimeSpan.Zero;
 
         private bool _ghostVisibility = true;
 
@@ -63,6 +66,8 @@ namespace Content.Client.Ghost
 
             SubscribeNetworkEvent<GhostWarpsResponseEvent>(OnGhostWarpsResponse);
             SubscribeNetworkEvent<GhostUpdateGhostRoleCountEvent>(OnUpdateGhostRoleCount);
+            SubscribeNetworkEvent<GhostInsuranceRespawnStatusEvent>(OnInsuranceRespawnStatus);
+            SubscribeNetworkEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
 
             SubscribeLocalEvent<EyeComponent, ToggleLightingActionEvent>(OnToggleLighting);
             SubscribeLocalEvent<EyeComponent, ToggleFoVActionEvent>(OnToggleFoV);
@@ -138,6 +143,9 @@ namespace Content.Client.Ghost
             if (uid != _playerManager.LocalEntity)
                 return;
 
+            InsuranceRespawnAvailable = false;
+            InsuranceRespawnAt = TimeSpan.Zero;
+
             GhostVisibility = false;
             PlayerRemoved?.Invoke(component);
         }
@@ -181,6 +189,23 @@ namespace Content.Client.Ghost
             GhostRoleCountUpdated?.Invoke(msg);
         }
 
+        private void OnInsuranceRespawnStatus(GhostInsuranceRespawnStatusEvent msg)
+        {
+            InsuranceRespawnAvailable = msg.Available;
+            InsuranceRespawnAt = msg.RespawnAt;
+            if (Player != null)
+                PlayerUpdated?.Invoke(Player);
+        }
+
+        /// <summary>
+        /// Clears stale insurance UI between rounds (replacing any attach-based reset that broke ghost visit / return).
+        /// </summary>
+        private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
+        {
+            InsuranceRespawnAvailable = false;
+            InsuranceRespawnAt = TimeSpan.Zero;
+        }
+
         public void RequestWarps()
         {
             RaiseNetworkEvent(new GhostWarpsRequestEvent());
@@ -211,6 +236,11 @@ namespace Content.Client.Ghost
         {
             var msg = new GhostReturnToRoundRequest();
             RaiseNetworkEvent(msg);
+        }
+
+        public void UseInsuranceRespawn()
+        {
+            RaiseNetworkEvent(new GhostInsuranceRespawnRequest());
         }
     }
 }

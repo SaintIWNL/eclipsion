@@ -36,3 +36,5 @@ ghost-roles-window-rules-footer = The button will enable after {$time} seconds (
 ghost-return-to-body-title = Return to Body
 ghost-return-to-body-text = You are being revived! Return to your body?
 ghost-gui-return-to-round-button = Return to round
+ghost-gui-insurance-respawn-ready = Use insurance
+ghost-gui-insurance-respawn-timer = Insurance in {$time}
