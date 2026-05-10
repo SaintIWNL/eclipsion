@@ -1,0 +1,27 @@
+<!-- Ratgore Start -->
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                    Title="{Loc hardliner-fire-control-window-title}"
+                    SetSize="560 480"
+                    MinSize="480 360">
+    <BoxContainer Orientation="Vertical"
+                  Margin="10"
+                  VerticalExpand="True"
+                  HorizontalExpand="True">
+        <controls:StripeBack>
+            <Label Text="{Loc hardliner-fire-control-window-heading}"
+                   FontColorOverride="#7fe8ff"
+                   Align="Center"/>
+        </controls:StripeBack>
+        <Label Name="HintLabel"
+               Text="{Loc hardliner-fire-control-window-hint}"
+               FontColorOverride="#9aa7b5"
+               Margin="0,6,0,8"/>
+        <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+            <BoxContainer Name="WeaponsColumn"
+                          Orientation="Vertical"
+                          VerticalExpand="True"/>
+        </ScrollContainer>
+    </BoxContainer>
+</controls:FancyWindow>
+<!-- Ratgore End -->
