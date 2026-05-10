@@ -99,8 +99,19 @@ public sealed class MoneyTransferCartridgeSystem : EntitySystem
                         ("total", totalDebit),
                         ("commission", commission));
                 }
-                else if (!_bank.TryBankWithdraw(sender, totalDebit) || !_bank.TryBankDeposit(recipient, amount))
+                else if (!_bank.TryBankWithdraw(sender, totalDebit))
                 {
+                    error = Loc.GetString("money-transfer-error-failed");
+                }
+                else if (!_bank.TryBankDeposit(recipient, amount))
+                {
+                    // Compensate the sender if crediting recipient failed after a successful withdraw.
+                    if (!_bank.TryBankDeposit(sender, totalDebit))
+                    {
+                        _adminLog.Add(LogType.ATMUsage, LogImpact.Extreme,
+                            $"Failed to rollback transfer debit for {ToPrettyString(sender):player}. Amount: {amount}, Fee: {commission}, Debited: {totalDebit}, Recipient: {ToPrettyString(recipient):player}");
+                    }
+
                     error = Loc.GetString("money-transfer-error-failed");
                 }
                 else
