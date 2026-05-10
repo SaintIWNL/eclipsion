@@ -786,5 +786,12 @@ Entries:
     id: 97
     time: '2026-05-09T12:06:33.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/188
+  - author: ziz11
+    changes:
+      - type: Tweak
+        message: Увеличен запас одноразовых Blastpop-пистолетов в бюджетном оружейном торгомате Шиногары.
+    id: 98
+    time: '2026-05-10T02:38:50.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/192
 Name: Rat
 Order: -1
