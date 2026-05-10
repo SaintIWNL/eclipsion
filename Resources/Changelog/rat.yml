@@ -809,5 +809,12 @@ Entries:
     id: 100
     time: '2026-05-10T09:11:56.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/191
+  - author: xomik033
+    changes:
+      - type: Add
+        message: Новая музыка в бумбокс
+    id: 101
+    time: '2026-05-10T09:12:46.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/190
 Name: Rat
 Order: -1
