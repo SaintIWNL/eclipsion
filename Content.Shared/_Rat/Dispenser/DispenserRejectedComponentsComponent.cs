@@ -15,5 +15,5 @@ public sealed partial class DispenserRejectedComponentsComponent : Component
     public List<string> RejectedComponents = new();
 
     [DataField]
-    public LocId DenyPopup = "bioprocessor-interdyne-clone-organ-denied";
+    public LocId DenyPopup = string.Empty;
 }
