@@ -168,6 +168,20 @@ namespace Content.Client.Ghost
             if (uid != _playerManager.LocalEntity)
                 return;
 
+            // Replicated GhostComponent carries insurance respawn flags from the server; mirror them here so the
+            // ghost HUD matches even if GhostInsuranceRespawnStatusEvent reorders relative to component state.
+            if (InsuranceRespawnAvailable != component.InsuranceRespawnAvailable
+                || InsuranceRespawnAt != component.InsuranceRespawnAt)
+            {
+                InsuranceRespawnAvailable = component.InsuranceRespawnAvailable;
+                InsuranceRespawnAt = component.InsuranceRespawnAt;
+                if (!component.InsuranceRespawnAvailable)
+                {
+                    InsuranceSpawnMachineBound = true;
+                    InsuranceSpawnMachinePowered = true;
+                }
+            }
+
             PlayerUpdated?.Invoke(component);
         }
 

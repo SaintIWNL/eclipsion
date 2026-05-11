@@ -217,6 +217,7 @@ public sealed class LifeInsuranceSystem : EntitySystem
         }
 
         life.IsInsured = true;
+        life.InsuredJobSnapshot = TryGetCurrentJob(targetMindId);
         Dirty(targetMindId, life);
 
         // Notify the insured living client.
@@ -267,7 +268,10 @@ public sealed class LifeInsuranceSystem : EntitySystem
         }
 
         if (life.IsInsured)
+        {
             life.IsInsured = false;
+            life.InsuredJobSnapshot = null;
+        }
 
         life.PreferredSpawnMachine = null;
 
@@ -487,11 +491,12 @@ public sealed class LifeInsuranceSystem : EntitySystem
         if (!life.IsInsured)
             return;
 
-        var job = TryGetCurrentJob(mindId);
+        var job = TryGetCurrentJob(mindId) ?? life.InsuredJobSnapshot;
         if (job == null)
             return;
 
         life.IsInsured = false;
+        life.InsuredJobSnapshot = null;
         life.PendingRespawnAt = _timing.CurTime + TimeSpan.FromMinutes(5);
         life.PendingRespawnJob = job;
         life.PendingRespawnStation = stationSourceEntity != null
@@ -628,7 +633,6 @@ public sealed class LifeInsuranceSystem : EntitySystem
         var storedProteins = _materialStorage.GetMaterialAmount(uid, component.ProteinMaterialId);
         var targets = new List<LifeInsuranceTargetEntry>();
 
-        var consoleStation = _station.GetOwningStation(uid);
         foreach (var session in _players.Sessions)
         {
             if (session.AttachedEntity is not { } playerUid)
@@ -638,17 +642,6 @@ public sealed class LifeInsuranceSystem : EntitySystem
                 continue;
 
             var life = EnsureComp<LifeInsuranceComponent>(mindId);
-
-            // Pending payout is tied to the station stored at death — not where the ghost wanders after.
-            if (life.PendingRespawnAt != null && life.PendingRespawnStation is { } payoutStation)
-            {
-                if (payoutStation != consoleStation)
-                    continue;
-            }
-            else if (_station.GetOwningStation(playerUid) != consoleStation)
-            {
-                continue;
-            }
 
             var isGhostPending = TryComp<GhostComponent>(playerUid, out _) && life.PendingRespawnAt != null;
             var isAlive = TryComp<MobStateComponent>(playerUid, out var mobState)

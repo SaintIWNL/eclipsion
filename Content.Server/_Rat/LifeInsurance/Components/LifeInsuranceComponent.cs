@@ -29,4 +29,10 @@ public sealed partial class LifeInsuranceComponent : Component
     /// </summary>
     [DataField]
     public EntityUid? PreferredSpawnMachine;
+
+    /// <summary>
+    /// Job captured when the policy was issued; used at payout if mind roles no longer expose a job prototype.
+    /// </summary>
+    [DataField]
+    public ProtoId<JobPrototype>? InsuredJobSnapshot;
 }
