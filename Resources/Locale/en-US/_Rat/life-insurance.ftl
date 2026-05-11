@@ -35,7 +35,7 @@ life-insurance-popup-no-spawn-machine = No clone outlet available. Assign one fr
 life-insurance-popup-spawn-unpowered-insured = Your clone outlet has no power. Insurance respawn is unavailable until it is powered.
 life-insurance-popup-clone-emerged = {$name} spills out of the clone outlet.
 life-insurance-pda-notification-header-insured = [color=#4CAF50][bold]!!! INSURANCE ACTIVE !!![/bold][/color]
-life-insurance-pda-notification-message-insured = [color=#4CAF50]Interdyne: Your policy is active. Upon death, you will be cloned.[/color]
+life-insurance-pda-notification-message-insured = Interdyne: Your policy is active. Upon death, you will be cloned.
 life-insurance-pda-notification-header-voided = [color=#F44336][bold]!!! INSURANCE VOIDED !!![/bold][/color]
-life-insurance-pda-notification-message-voided = [color=#F44336]Interdyne: Your policy has been canceled. Upon death, you will not be cloned.[/color]
+life-insurance-pda-notification-message-voided = Interdyne: Your policy has been canceled. Upon death, you will not be cloned.
 life-insurance-ghost-notification-message-voided = !!! INSURANCE CANCELED !!!. Someone has voided your insurance.

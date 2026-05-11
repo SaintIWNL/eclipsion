@@ -35,7 +35,7 @@ life-insurance-popup-no-spawn-machine = Нет аппарата клониров
 life-insurance-popup-spawn-unpowered-insured = Аппарат клонирования обесточен.
 life-insurance-popup-clone-emerged = {$name} вываливается из аппарата клонирования.
 life-insurance-pda-notification-header-insured = [color=#4CAF50][bold]!!! СТРАХОВКА ОФОРМЛЕНА !!![/bold][/color]
-life-insurance-pda-notification-message-insured = [color=#4CAF50]Interdyne: ваш полис активирован. После гибели вы будете клонированы.[/color]
+life-insurance-pda-notification-message-insured = Interdyne: ваш полис активирован. После гибели вы будете клонированы.
 life-insurance-pda-notification-header-voided = [color=#F44336][bold]!!! СТРАХОВКА АННУЛИРОВАНА !!![/bold][/color]
-life-insurance-pda-notification-message-voided = [color=#F44336]Interdyne: ваш полис отменён. После гибели вы не будете клонированы.[/color]
+life-insurance-pda-notification-message-voided = Interdyne: ваш полис отменён. После гибели вы не будете клонированы.
 life-insurance-ghost-notification-message-voided = !!! СТРАХОВКА ОТМЕНЕНА !!!. Кто-то аннулировал вашу страховку.
