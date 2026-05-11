@@ -12,7 +12,6 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-
 namespace Content.Shared._Crescent;
 
 /// <summary>
@@ -24,8 +23,7 @@ public sealed partial class ProjectilePhasePreventComponent : Component
 {
     public Vector2 start = Vector2.Zero;
     public MapId mapId = MapId.Nullspace;
-    public object containedAt;
+    public EntityUid ignoredGrid = EntityUid.Invalid;
     [ViewVariables(VVAccess.ReadWrite), DataField("mask", customTypeSerializer: typeof(FlagSerializer<CollisionMask>))]
     public int relevantBitmasks = 0;
-
 }
