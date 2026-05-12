@@ -8,6 +8,8 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Item;
 using Content.Shared.Lock;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Popups;
 using Content.Shared.Storage.Components;
@@ -245,7 +247,9 @@ public abstract class SharedEntityStorageSystem : EntitySystem
         var ev = new StorageBeforeCloseEvent(entities, new());
         RaiseLocalEvent(uid, ref ev);
         var count = 0;
-        var mobCount = 0;
+        var legacyMobCount = 0;
+        var livingMobsClosed = 0;
+        var deadMobsClosed = 0;
         foreach (var entity in ev.Contents)
         {
             if (!ev.BypassChecks.Contains(entity))
@@ -256,15 +260,43 @@ public abstract class SharedEntityStorageSystem : EntitySystem
 
             if (component.MaxMobCount >= 0 && HasComp<BodyComponent>(entity))
             {
-                if (mobCount >= component.MaxMobCount)
+                if (component.MaxDeadMobCount >= 0)
+                {
+                    if (IsDeadForEntityStorageMobLimit(entity))
+                    {
+                        if (deadMobsClosed >= component.MaxDeadMobCount)
+                            continue;
+                    }
+                    else if (livingMobsClosed >= component.MaxMobCount)
+                    {
+                        continue;
+                    }
+                }
+                else if (legacyMobCount >= component.MaxMobCount)
+                {
                     continue;
-                mobCount++;
+                }
             }
 
             if (!AddToContents(entity, uid, component))
                 continue;
 
             count++;
+            if (component.MaxMobCount >= 0 && HasComp<BodyComponent>(entity))
+            {
+                if (component.MaxDeadMobCount >= 0)
+                {
+                    if (IsDeadForEntityStorageMobLimit(entity))
+                        deadMobsClosed++;
+                    else
+                        livingMobsClosed++;
+                }
+                else
+                {
+                    legacyMobCount++;
+                }
+            }
+
             if (count >= component.Capacity)
                 break;
         }
@@ -326,14 +358,41 @@ public abstract class SharedEntityStorageSystem : EntitySystem
 
         if (component.MaxMobCount >= 0 && HasComp<BodyComponent>(toInsert))
         {
-            var mobCount = 0;
-            foreach (var ent in component.Contents.ContainedEntities)
+            if (component.MaxDeadMobCount >= 0)
             {
-                if (HasComp<BodyComponent>(ent))
-                    mobCount++;
+                var livingInside = 0;
+                var deadInside = 0;
+                foreach (var ent in component.Contents.ContainedEntities)
+                {
+                    if (!HasComp<BodyComponent>(ent))
+                        continue;
+                    if (IsDeadForEntityStorageMobLimit(ent))
+                        deadInside++;
+                    else
+                        livingInside++;
+                }
+
+                if (IsDeadForEntityStorageMobLimit(toInsert))
+                {
+                    if (deadInside >= component.MaxDeadMobCount)
+                        return false;
+                }
+                else if (livingInside >= component.MaxMobCount)
+                {
+                    return false;
+                }
             }
-            if (mobCount >= component.MaxMobCount)
-                return false;
+            else
+            {
+                var mobCount = 0;
+                foreach (var ent in component.Contents.ContainedEntities)
+                {
+                    if (HasComp<BodyComponent>(ent))
+                        mobCount++;
+                }
+                if (mobCount >= component.MaxMobCount)
+                    return false;
+            }
         }
 
         return CanFit(toInsert, container, component);
@@ -472,6 +531,14 @@ public abstract class SharedEntityStorageSystem : EntitySystem
         }
 
         return allowedToEat;
+    }
+
+    /// <summary>
+    /// Bodies without mob state (e.g. some simple mobs) count as living for storage limits.
+    /// </summary>
+    private bool IsDeadForEntityStorageMobLimit(EntityUid uid)
+    {
+        return TryComp<MobStateComponent>(uid, out var mobState) && mobState.CurrentState == MobState.Dead;
     }
 
     private void ModifyComponents(EntityUid uid, SharedEntityStorageComponent? component = null)

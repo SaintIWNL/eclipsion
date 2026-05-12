@@ -39,6 +39,7 @@
         - MachineLayer
   - type: EntityStorage
     maxMobCount: 2
+    maxDeadMobCount: 20
   - type: PlaceableSurface
     isPlaceable: false # defaults to closed.
   - type: Damageable
