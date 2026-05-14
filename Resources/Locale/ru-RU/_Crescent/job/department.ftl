@@ -1,10 +1,10 @@
 department-NCWL = Лига Рабочих Нового Полумесяца
-department-NCSP = Коалиция Вольной Станции Тайпан
+department-NCSP = Коалиция Вольных Станций Тайпана
 department-DSM = Божественный Мандат Солнца
 department-SRM = Шестое Ополчение Святого Ромейна
 department-SHI = «Шиногара» Тяжёлая Промышленность
 department-CMM = Колониальные Минитмены
-department-TAP = Тайпанско-Атирийский Пакт
+department-TAP = Тайпано-Атирийский Пакт
 department-ATH = Центральная Власть Солнца
 department-NCWL-W = Остатки ополчения ЛРНП
-department-DSM-W = Штрафной отдел БМС
+department-DSM-W = Изгнанники БМС
