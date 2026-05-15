@@ -5,7 +5,7 @@
   id: Krechet
   name: ЛРНП Кречет
   description: Лёгкий коммунарский истребитель.
-  price: 30000
+  price: 25000
   category: Small
   group: None
   path: /Maps/_Crescent/Shuttles/NCWL/krechet.yml
