@@ -11,9 +11,9 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 // Rat-start
+using Content.Server.GameTicking.Events;
 using Content.Shared.Ghost;
 using Content.Shared.Mobs.Components;
-using Content.Shared.NPC.Systems;
 using Prometheus;
 using Robust.Server.Player;
 using Robust.Shared.Map;
@@ -43,15 +43,17 @@ namespace Content.Server.NPC.Systems
         private static readonly Gauge ActiveGauge = Metrics.CreateGauge(
             "npc_active_count",
             "Amount of NPCs that are actively processing");
-        
+
         [Dependency] private readonly IPlayerManager _playerManager = default!;
-        
+
         private bool _pauseWhenNoPlayersInRange;
         private float _playerPauseDistance;
         private float _playerDistanceCheckTimer;
         private const float PlayerDistanceCheckInterval = 2.0f;
-        
+
         private readonly List<(EntityUid Entity, EntityCoordinates Coords)> _playerPauseCandidates = new();
+        private readonly HashSet<EntityUid> _activePlayers = new();
+        private readonly object _lock = new();
         // Rat-end
 
         /// <inheritdoc />
@@ -64,6 +66,10 @@ namespace Content.Server.NPC.Systems
             // Rat-start
             Subs.CVar(_configurationManager, CCVars.NPCPauseWhenNoPlayersInRange, value => _pauseWhenNoPlayersInRange = value, true);
             Subs.CVar(_configurationManager, CCVars.NPCPlayerPauseDistance, value => _playerPauseDistance = value, true);
+            // Events
+            SubscribeLocalEvent<RoundStartingEvent>(OnRoundStart);
+            SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
+            SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerDetached);
             // Rat-end
         }
 
@@ -94,6 +100,44 @@ namespace Content.Server.NPC.Systems
         {
             SleepNPC(uid, component);
         }
+
+        // Rat-start
+        public void OnRoundStart(RoundStartingEvent ev)
+        {
+            lock (_lock)
+            {
+                _activePlayers.Clear();
+            }
+        }
+
+        public void OnPlayerAttached(PlayerAttachedEvent args)
+        {
+            var playerUid = args.Entity;
+
+            if (playerUid.IsValid() &&
+             !HasComp<GhostComponent>(playerUid))
+            {
+                lock (_lock)
+                {
+                    _activePlayers.Add(playerUid);
+                }
+            }
+        }
+
+        public void OnPlayerDetached(PlayerDetachedEvent args)
+        {
+            var playerUid = args.Entity;
+            
+            if (playerUid.IsValid() &&
+             !HasComp<GhostComponent>(playerUid))
+            {
+                lock (_lock)
+                {
+                    _activePlayers.Remove(playerUid);
+                }
+            }
+        }
+        // Rat-end
 
         /// <summary>
         /// Is the NPC awake and updating?
@@ -184,22 +228,20 @@ namespace Content.Server.NPC.Systems
         private void CheckPlayerDistancesAndPauseNPCs()
         {
             _playerPauseCandidates.Clear();
-            foreach (var playerData in _playerManager.GetAllPlayerData())
+            lock (_lock)
             {
-                if (!_playerManager.TryGetSessionById(playerData.UserId, out var session) || session == null)
-                    continue;
+                foreach (var playerEnt in _activePlayers)
+                {
+                    if (!playerEnt.Valid || TerminatingOrDeleted(playerEnt))
+                        continue;
 
-                if (session.AttachedEntity is not { Valid: true } playerEnt)
-                    continue;
+                    if (TryComp<MobStateComponent>(playerEnt, out var state) && state.CurrentState != MobState.Alive)
+                        continue;
 
-                if (HasComp<GhostComponent>(playerEnt))
-                    continue;
-
-                if (TryComp<MobStateComponent>(playerEnt, out var state) && state.CurrentState != MobState.Alive)
-                    continue;
-
-                _playerPauseCandidates.Add((playerEnt, Transform(playerEnt).Coordinates));
+                    _playerPauseCandidates.Add((playerEnt, Transform(playerEnt).Coordinates));
+                }
             }
+
 
             var anyPlayers = _playerPauseCandidates.Count > 0;
 
@@ -208,7 +250,7 @@ namespace Content.Server.NPC.Systems
             while (npcQuery.MoveNext(out var npcUid, out var htn, out var npcTransform))
             {
                 if (HasComp<ActorComponent>(npcUid) ||
-                    (TryComp<MindContainerComponent>(npcUid, out var mindContainer) && mindContainer.HasMind))
+                    TryComp<MindContainerComponent>(npcUid, out var mindContainer) && mindContainer.HasMind)
                     continue;
                 if (_mobState.IsIncapacitated(npcUid))
                     continue;
