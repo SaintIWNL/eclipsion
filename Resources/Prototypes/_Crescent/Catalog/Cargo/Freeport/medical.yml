@@ -4,7 +4,7 @@
     sprite: Objects/Specific/Medical/firstaidkits.rsi
     state: firstaid
   product: CrateMedicalSupplies
-  cost: 3000
+  cost: 1500
   category: cargoproduct-category-name-medical
   group: freeport
 
@@ -14,7 +14,7 @@
     sprite: _Crescent/Objects/Materials/ore.rsi
     state: deactivatedphoron
   product: CratePhoron
-  cost: 7000
+  cost: 1750
   category: cargoproduct-category-name-medical
   group: freeport
 
@@ -24,7 +24,7 @@
     sprite: _Crescent/Objects/Materials/ore.rsi
     state: plasmaisotope
   product: CrateIsotopes
-  cost: 8500
+  cost: 2250
   category: cargoproduct-category-name-medical
   group: freeport
 
@@ -34,7 +34,7 @@
     sprite: _Crescent/Objects/Materials/ore.rsi
     state: galine5
   product: CrateGaline
-  cost: 6000
+  cost: 1500
   category: cargoproduct-category-name-medical
   group: freeport
 
@@ -44,7 +44,7 @@
     sprite: _Crescent/Objects/Materials/ore.rsi
     state: mechanites
   product: CrateMechanite
-  cost: 12500
+  cost: 3125
   category: cargoproduct-category-name-medical
   group: freeport
 
