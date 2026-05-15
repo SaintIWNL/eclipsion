@@ -27,3 +27,15 @@ life-insurance-popup-insufficient-proteins = Недостаточно экзот
 life-insurance-popup-insufficient-credits = Недостаточно кредитов на вашем счёте.
 life-insurance-popup-nothing-to-void = Нет действующего полиса или ожидающей выплаты страховки.
 life-insurance-popup-void-success = Страховка аннулирована.
+life-insurance-spawn-machine-title = Аппарат клонирования
+life-insurance-no-spawn-machines = Нет доступных аппаратов
+life-insurance-popup-invalid-spawn-machine = Неверный аппарат или не найден.
+life-insurance-popup-no-spawn-machine-policy = Выберите аппарат клонирования перед оформлением полиса.
+life-insurance-popup-no-spawn-machine = Нет аппарата клонирования. Назначьте его в страховой консоли.
+life-insurance-popup-spawn-unpowered-insured = Аппарат клонирования обесточен.
+life-insurance-popup-clone-emerged = {$name} вываливается из аппарата клонирования.
+life-insurance-pda-notification-header-insured = [color=#4CAF50][bold]!!! СТРАХОВКА ОФОРМЛЕНА !!![/bold][/color]
+life-insurance-pda-notification-message-insured = Interdyne: ваш полис активирован. После гибели вы будете клонированы.
+life-insurance-pda-notification-header-voided = [color=#F44336][bold]!!! СТРАХОВКА АННУЛИРОВАНА !!![/bold][/color]
+life-insurance-pda-notification-message-voided = Interdyne: ваш полис отменён. После гибели вы не будете клонированы.
+life-insurance-ghost-notification-message-voided = !!! СТРАХОВКА ОТМЕНЕНА !!!. Кто-то аннулировал вашу страховку.

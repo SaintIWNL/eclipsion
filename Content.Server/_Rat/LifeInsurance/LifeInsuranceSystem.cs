@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Content.Server._Rat.LifeInsurance.Components;
 using Content.Server.Bank;
@@ -5,23 +6,39 @@ using Content.Server.GameTicking;
 using Content.Server.Materials;
 using Content.Server.Mind;
 using Content.Server.Popups;
+using Content.Server.Power.Components;
+using Content.Server.Power.EntitySystems;
+using Content.Server.Standing;
 using Content.Server.Station.Systems;
 using Content.Shared._Rat.LifeInsurance;
 using Content.Shared.Access.Systems;
+using Content.Shared.Administration.Logs;
+using Content.Server.Chat.Managers;
+using Content.Server.CartridgeLoader;
 using Content.Shared.Ghost;
+using Content.Shared.Chat;
 using Content.Shared.Materials;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
+using Content.Shared.Power;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
+using Content.Shared.Database;
 using Content.Shared.GameTicking;
+using Content.Shared.Inventory;
+using Content.Shared.PDA;
+using Content.Shared.CartridgeLoader;
 using Content.Shared._Shitmed.Body.Organ;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Server._Rat.LifeInsurance;
@@ -41,8 +58,28 @@ public sealed class LifeInsuranceSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly AccessReaderSystem _accessReader = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly CartridgeLoaderSystem _cartridgeLoader = default!;
+    [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private readonly SharedRoleSystem _roles = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly LayingDownSystem _layingDown = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly PowerReceiverSystem _powerReceiver = default!;
+    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
     private TimeSpan _nextGhostSync = TimeSpan.Zero;
+
+    /// <summary>
+    /// Starting gear slots kept on insurance clone bodies (PDA, headset, uniform, shoes, gloves).
+    /// </summary>
+    private static readonly HashSet<string> InsuranceCloneRoleGearSlots = new()
+    {
+        "id",
+        "ears",
+        "jumpsuit",
+        "shoes",
+        "gloves",
+    };
 
     public override void Initialize()
     {
@@ -51,12 +88,30 @@ public sealed class LifeInsuranceSystem : EntitySystem
         SubscribeLocalEvent<LifeInsuranceConsoleComponent, LifeInsuranceSelectTargetMessage>(OnSelectTarget);
         SubscribeLocalEvent<LifeInsuranceConsoleComponent, LifeInsuranceVoidInsuranceMessage>(OnVoidInsurance);
         SubscribeLocalEvent<LifeInsuranceConsoleComponent, LifeInsuranceEjectProteinsMessage>(OnEjectProteins);
+        SubscribeLocalEvent<LifeInsuranceConsoleComponent, LifeInsuranceSetSpawnMachineMessage>(OnSetSpawnMachine);
+        SubscribeLocalEvent<LifeInsuranceSpawnMachineComponent, EntityTerminatingEvent>(OnSpawnMachineTerminating);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<MindComponent, MindGotRemovedEvent>(OnMindGotRemovedFromContainer);
         SubscribeLocalEvent<GhostComponent, ComponentStartup>(OnGhostStartup);
         SubscribeLocalEvent<GhostComponent, MindAddedMessage>(OnGhostMindAdded);
 
         SubscribeNetworkEvent<GhostInsuranceRespawnRequest>(OnInsuranceRespawnRequest);
+        SubscribeLocalEvent<ApcPowerReceiverComponent, PowerChangedEvent>(OnInsuranceSpawnMachinePowerChanged);
+    }
+
+    private void OnInsuranceSpawnMachinePowerChanged(EntityUid uid, ApcPowerReceiverComponent component, ref PowerChangedEvent args)
+    {
+        if (!HasComp<LifeInsuranceSpawnMachineComponent>(uid))
+            return;
+
+        var query = EntityQueryEnumerator<LifeInsuranceComponent>();
+        while (query.MoveNext(out var mindId, out var life))
+        {
+            if (life.PreferredSpawnMachine != uid || life.PendingRespawnAt is not { } at)
+                continue;
+
+            PushInsuranceStatusToMind(mindId, true, at);
+        }
     }
 
     public override void Update(float frameTime)
@@ -100,6 +155,19 @@ public sealed class LifeInsuranceSystem : EntitySystem
 
         var life = EnsureComp<LifeInsuranceComponent>(targetMindId);
 
+        if (args.SpawnMachine.Valid)
+        {
+            var spawnEnt = GetEntity(args.SpawnMachine);
+            if (spawnEnt == EntityUid.Invalid || !HasComp<LifeInsuranceSpawnMachineComponent>(spawnEnt))
+            {
+                _popup.PopupEntity(Loc.GetString("life-insurance-popup-invalid-spawn-machine"), uid, user, PopupType.Small);
+                return;
+            }
+
+            life.PreferredSpawnMachine = spawnEnt;
+            Dirty(targetMindId, life);
+        }
+
         if (TryComp<MobStateComponent>(target, out var targetMob))
         {
             if (targetMob.CurrentState != MobState.Alive)
@@ -118,6 +186,12 @@ public sealed class LifeInsuranceSystem : EntitySystem
         if (life.PendingRespawnAt != null)
         {
             _popup.PopupEntity(Loc.GetString("life-insurance-popup-pending-respawn"), uid, user, PopupType.Small);
+            return;
+        }
+
+        if (!MindSpawnMachineReady(targetMindId))
+        {
+            _popup.PopupEntity(Loc.GetString("life-insurance-popup-no-spawn-machine-policy"), uid, user, PopupType.Small);
             return;
         }
 
@@ -146,7 +220,19 @@ public sealed class LifeInsuranceSystem : EntitySystem
         }
 
         life.IsInsured = true;
+        life.InsuredJobSnapshot = TryGetCurrentJob(targetMindId);
         Dirty(targetMindId, life);
+
+        // Notify the insured living client.
+        var pdaHeader = Loc.GetString("life-insurance-pda-notification-header-insured");
+        var pdaMessage = Loc.GetString("life-insurance-pda-notification-message-insured",
+            ("name", Name(target)));
+        TryNotifyPdaOrMind(target, targetMindId, pdaHeader, pdaMessage, Color.LimeGreen);
+
+        var preferredSpawn = life.PreferredSpawnMachine;
+        _adminLog.Add(LogType.Action, LogImpact.Medium,
+            $"{ToPrettyString(user):player} issued life insurance at {ToPrettyString(uid):entity} for {ToPrettyString(target):player} ({nextPrice} credits; spawn {ToPrettyString(preferredSpawn):entity})");
+
         UpdateUi(uid, component);
     }
 
@@ -176,6 +262,11 @@ public sealed class LifeInsuranceSystem : EntitySystem
 
         var life = EnsureComp<LifeInsuranceComponent>(targetMindId);
 
+        var targetIsAlive = TryComp<MobStateComponent>(target, out var targetMob)
+            && targetMob.CurrentState == MobState.Alive;
+        var hadPendingRespawn = life.PendingRespawnAt != null;
+        var targetIsGhost = TryComp<GhostComponent>(target, out _);
+
         var hasCoverage = life.IsInsured || life.PendingRespawnAt != null;
         if (!hasCoverage)
         {
@@ -184,7 +275,12 @@ public sealed class LifeInsuranceSystem : EntitySystem
         }
 
         if (life.IsInsured)
+        {
             life.IsInsured = false;
+            life.InsuredJobSnapshot = null;
+        }
+
+        life.PreferredSpawnMachine = null;
 
         if (life.PendingRespawnAt != null)
         {
@@ -196,10 +292,36 @@ public sealed class LifeInsuranceSystem : EntitySystem
                 _ghost.SetInsuranceRespawnData(target, false, TimeSpan.Zero, ghost);
 
             PushInsuranceStatusToMind(targetMindId, false, TimeSpan.Zero);
+
+            if (targetIsGhost)
+            {
+                // Guest (ghost body) notification.
+                var guestMessage = Loc.GetString("life-insurance-ghost-notification-message-voided",
+                    ("name", Name(target)));
+                TryNotifyMindSession(
+                    targetMindId,
+                    guestMessage,
+                    Color.IndianRed,
+                    audioPath: "/Audio/Items/beep.ogg");
+            }
         }
 
         Dirty(targetMindId, life);
+
+        // Notify living client (PDA + chat) only for non-ghost cancellations.
+        if (targetIsAlive && !hadPendingRespawn)
+        {
+            var pdaHeader = Loc.GetString("life-insurance-pda-notification-header-voided");
+            var pdaMessage = Loc.GetString("life-insurance-pda-notification-message-voided",
+                ("name", Name(target)));
+            TryNotifyPdaOrMind(target, targetMindId, pdaHeader, pdaMessage, Color.IndianRed);
+        }
+
         _popup.PopupEntity(Loc.GetString("life-insurance-popup-void-success"), uid, user, PopupType.Small);
+
+        _adminLog.Add(LogType.Action, LogImpact.Medium,
+            $"{ToPrettyString(user):player} voided life insurance at {ToPrettyString(uid):entity} for {ToPrettyString(target):player} (hadPending={hadPendingRespawn}, ghost={targetIsGhost})");
+
         UpdateUi(uid, component);
     }
 
@@ -215,7 +337,118 @@ public sealed class LifeInsuranceSystem : EntitySystem
         }
 
         _materialStorage.EjectMaterial(uid, component.ProteinMaterialId);
+        _adminLog.Add(LogType.Action, LogImpact.Low,
+            $"{ToPrettyString(user):player} ejected exotic proteins from {ToPrettyString(uid):entity}");
         UpdateUi(uid, component);
+    }
+
+    private void OnSetSpawnMachine(EntityUid uid, LifeInsuranceConsoleComponent component, LifeInsuranceSetSpawnMachineMessage args)
+    {
+        if (args.Actor is not { Valid: true } user)
+            return;
+
+        if (!HasConsoleAccess(uid, user))
+        {
+            _popup.PopupEntity(Loc.GetString("life-insurance-popup-access-denied"), uid, user, PopupType.Small);
+            return;
+        }
+
+        var target = GetEntity(args.Target);
+        var spawnMachine = GetEntity(args.SpawnMachine);
+
+        if (target == EntityUid.Invalid || !_mind.TryGetMind(target, out var targetMindId, out _))
+        {
+            _popup.PopupEntity(Loc.GetString("life-insurance-popup-invalid-target"), uid, user, PopupType.Small);
+            return;
+        }
+
+        if (spawnMachine == EntityUid.Invalid
+            || !HasComp<LifeInsuranceSpawnMachineComponent>(spawnMachine))
+        {
+            _popup.PopupEntity(Loc.GetString("life-insurance-popup-invalid-spawn-machine"), uid, user, PopupType.Small);
+            return;
+        }
+
+        var life = EnsureComp<LifeInsuranceComponent>(targetMindId);
+        life.PreferredSpawnMachine = spawnMachine;
+        Dirty(targetMindId, life);
+
+        _adminLog.Add(LogType.Action, LogImpact.Low,
+            $"{ToPrettyString(user):player} set life insurance clone outlet for {ToPrettyString(target):player} to {ToPrettyString(spawnMachine):entity} via {ToPrettyString(uid):entity}");
+
+        if (TryComp<MindComponent>(targetMindId, out var mindComp)
+            && mindComp.Session != null
+            && life.PendingRespawnAt != null)
+        {
+            PushInsuranceStatusToMind(targetMindId, true, life.PendingRespawnAt.Value);
+        }
+
+        UpdateUi(uid, component);
+    }
+
+    private void OnSpawnMachineTerminating(EntityUid uid, LifeInsuranceSpawnMachineComponent component, ref EntityTerminatingEvent args)
+    {
+        ReassignSpawnMachinesAfterRemoval(uid);
+    }
+
+    private void ReassignSpawnMachinesAfterRemoval(EntityUid removed)
+    {
+        var query = EntityQueryEnumerator<LifeInsuranceComponent>();
+        while (query.MoveNext(out var mindId, out var life))
+        {
+            if (life.PreferredSpawnMachine != removed)
+                continue;
+
+            life.PreferredSpawnMachine = TryPickRandomSpawnMachine(exclude: removed);
+            Dirty(mindId, life);
+
+            if (!TryComp<MindComponent>(mindId, out var mind) || mind.Session == null)
+                continue;
+
+            if (life.PendingRespawnAt is { } at)
+                PushInsuranceStatusToMind(mindId, true, at);
+        }
+    }
+
+    private EntityUid? TryPickRandomSpawnMachine(EntityUid? exclude = null)
+    {
+        var candidates = new List<EntityUid>();
+        var enumerator = EntityQueryEnumerator<LifeInsuranceSpawnMachineComponent>();
+        while (enumerator.MoveNext(out var machineUid, out _))
+        {
+            if (exclude != null && machineUid == exclude.Value)
+                continue;
+
+            candidates.Add(machineUid);
+        }
+
+        if (candidates.Count == 0)
+            return null;
+
+        return _random.Pick(candidates);
+    }
+
+    private bool MindSpawnMachineReady(EntityUid mindId)
+    {
+        if (!TryComp<LifeInsuranceComponent>(mindId, out var life)
+            || life.PreferredSpawnMachine is not { } sm)
+            return false;
+
+        return !TerminatingOrDeleted(sm) && HasComp<LifeInsuranceSpawnMachineComponent>(sm);
+    }
+
+    /// <summary>
+    /// Bound insurance spawn machine is receiving APC power (required for respawn, not for console binding).
+    /// </summary>
+    private bool InsuranceSpawnMachineReceivesPower(EntityUid mindId)
+    {
+        if (!TryComp<LifeInsuranceComponent>(mindId, out var life)
+            || life.PreferredSpawnMachine is not { } sm
+            || TerminatingOrDeleted(sm)
+            || !HasComp<LifeInsuranceSpawnMachineComponent>(sm))
+            return false;
+
+        return _powerReceiver.IsPowered((sm, default));
     }
 
     private bool HasConsoleAccess(EntityUid console, EntityUid user)
@@ -274,11 +507,12 @@ public sealed class LifeInsuranceSystem : EntitySystem
         if (!life.IsInsured)
             return;
 
-        var job = TryGetCurrentJob(mindId);
+        var job = TryGetCurrentJob(mindId) ?? life.InsuredJobSnapshot;
         if (job == null)
             return;
 
         life.IsInsured = false;
+        life.InsuredJobSnapshot = null;
         life.PendingRespawnAt = _timing.CurTime + TimeSpan.FromMinutes(5);
         life.PendingRespawnJob = job;
         life.PendingRespawnStation = stationSourceEntity != null
@@ -287,11 +521,25 @@ public sealed class LifeInsuranceSystem : EntitySystem
         Dirty(mindId, life);
         PushInsuranceStatusToMind(mindId, true, life.PendingRespawnAt.Value);
 
-        if (TryComp<MindComponent>(mindId, out var mindComp)
-            && mindComp.Session?.AttachedEntity is { } current
-            && TryComp<GhostComponent>(current, out var ghost))
+        var deathOrigin = stationSourceEntity is { } d ? ToPrettyString(d) : "none";
+        if (TryComp<MindComponent>(mindId, out var mindComp))
         {
-            SetInsuranceOnGhost(current, life.PendingRespawnAt.Value, ghost);
+            if (mindComp.Session != null)
+            {
+                _adminLog.Add(LogType.Mind, LogImpact.Medium,
+                    $"Life insurance payout started for {mindComp.Session:player}: job {job}, respawn at {life.PendingRespawnAt}, death context {deathOrigin}");
+            }
+            else
+            {
+                _adminLog.Add(LogType.Mind, LogImpact.Medium,
+                    $"Life insurance payout started for mind {ToPrettyString(mindId):entity}: job {job}, respawn at {life.PendingRespawnAt}, death context {deathOrigin}");
+            }
+
+            if (mindComp.Session?.AttachedEntity is { } current
+                && TryComp<GhostComponent>(current, out var ghost))
+            {
+                SetInsuranceOnGhost(current, life.PendingRespawnAt.Value, ghost);
+            }
         }
     }
 
@@ -337,10 +585,24 @@ public sealed class LifeInsuranceSystem : EntitySystem
         if (station == null || TerminatingOrDeleted(station))
             station = _station.GetStations().FirstOrDefault();
 
-        var profile = _ticker.GetPlayerProfile(eventArgs.SenderSession);
-        var spawned = _stationSpawning.SpawnPlayerCharacterOnStation(station, job, profile);
-        if (spawned is not { } spawnedUid)
+        if (life.PreferredSpawnMachine is not { } spawnMachineEnt
+            || TerminatingOrDeleted(spawnMachineEnt)
+            || !HasComp<LifeInsuranceSpawnMachineComponent>(spawnMachineEnt))
+        {
+            _popup.PopupEntity(Loc.GetString("life-insurance-popup-no-spawn-machine"), ghostUid, ghostUid, PopupType.Small);
             return;
+        }
+
+        if (!_powerReceiver.IsPowered((spawnMachineEnt, default)))
+        {
+            _popup.PopupEntity(Loc.GetString("life-insurance-popup-spawn-unpowered-insured"), ghostUid, ghostUid, PopupType.Medium);
+            return;
+        }
+
+        var profile = _ticker.GetPlayerProfile(eventArgs.SenderSession);
+        var coords = Transform(spawnMachineEnt).Coordinates;
+        // Full job starting gear, then trim to uniform basics; lobby loadout skipped via PlayerSpawnCompleteEvent.
+        var spawnedUid = _stationSpawning.SpawnPlayerMob(coords, job, profile, station);
 
         _mind.TransferTo(mindId, spawnedUid, ghostCheckOverride: true, createGhost: false);
 
@@ -363,8 +625,19 @@ public sealed class LifeInsuranceSystem : EntitySystem
             silent: true,
             _ticker.PlayersJoinedRoundNormally,
             stationUid,
-            profile);
+            profile,
+            skipCharacterLoadout: true);
         RaiseLocalEvent(spawnedUid, spawnDone, true);
+
+        RestrictInsuranceCloneToBasicRoleGear(spawnedUid);
+
+        _layingDown.TryLieDown(spawnedUid);
+
+        _audio.PlayPvs(new SoundPathSpecifier("/Audio/Effects/Fluids/splat.ogg"), spawnedUid);
+        _popup.PopupEntity(
+            Loc.GetString("life-insurance-popup-clone-emerged", ("name", Name(spawnedUid))),
+            spawnedUid,
+            PopupType.Medium);
 
         QueueDel(ghostUid);
 
@@ -374,6 +647,9 @@ public sealed class LifeInsuranceSystem : EntitySystem
         life.RespawnCount++;
         Dirty(mindId, life);
         PushInsuranceStatusToMind(mindId, false, TimeSpan.Zero);
+
+        _adminLog.Add(LogType.Mind, LogImpact.High,
+            $"{eventArgs.SenderSession:player} used life insurance respawn: ghost {ToPrettyString(ghostUid):entity} -> body {ToPrettyString(spawnedUid):entity}, job {job}, outlet {ToPrettyString(spawnMachineEnt):entity}");
     }
 
     private void UpdateUi(EntityUid uid, LifeInsuranceConsoleComponent component)
@@ -390,7 +666,6 @@ public sealed class LifeInsuranceSystem : EntitySystem
         var storedProteins = _materialStorage.GetMaterialAmount(uid, component.ProteinMaterialId);
         var targets = new List<LifeInsuranceTargetEntry>();
 
-        var consoleStation = _station.GetOwningStation(uid);
         foreach (var session in _players.Sessions)
         {
             if (session.AttachedEntity is not { } playerUid)
@@ -400,17 +675,6 @@ public sealed class LifeInsuranceSystem : EntitySystem
                 continue;
 
             var life = EnsureComp<LifeInsuranceComponent>(mindId);
-
-            // Pending payout is tied to the station stored at death — not where the ghost wanders after.
-            if (life.PendingRespawnAt != null && life.PendingRespawnStation is { } payoutStation)
-            {
-                if (payoutStation != consoleStation)
-                    continue;
-            }
-            else if (_station.GetOwningStation(playerUid) != consoleStation)
-            {
-                continue;
-            }
 
             var isGhostPending = TryComp<GhostComponent>(playerUid, out _) && life.PendingRespawnAt != null;
             var isAlive = TryComp<MobStateComponent>(playerUid, out var mobState)
@@ -425,21 +689,43 @@ public sealed class LifeInsuranceSystem : EntitySystem
                 roleName = proto.LocalizedName;
 
             var nextCredits = GetCurrentPrice(component.BaseRequiredCredits, life.RespawnCount);
+            NetEntity? boundSpawn = null;
+            if (life.PreferredSpawnMachine is { } preferred && !TerminatingOrDeleted(preferred))
+                boundSpawn = GetNetEntity(preferred);
+
             targets.Add(new LifeInsuranceTargetEntry(
                 GetNetEntity(playerUid),
                 Name(playerUid),
                 roleName,
                 life.IsInsured,
                 life.PendingRespawnAt != null,
-                nextCredits));
+                nextCredits,
+                boundSpawn));
         }
 
         targets.Sort((a, b) => string.CompareOrdinal(a.Name, b.Name));
 
+        var spawnMachines = BuildSpawnMachineList();
+
         return new LifeInsuranceConsoleState(
             storedProteins,
             component.RequiredProteins,
-            targets);
+            targets,
+            spawnMachines);
+    }
+
+    private List<LifeInsuranceSpawnMachineEntry> BuildSpawnMachineList()
+    {
+        var list = new List<LifeInsuranceSpawnMachineEntry>();
+
+        var enumerator = EntityQueryEnumerator<LifeInsuranceSpawnMachineComponent, MetaDataComponent>();
+        while (enumerator.MoveNext(out var machineUid, out _, out var meta))
+        {
+            list.Add(new LifeInsuranceSpawnMachineEntry(GetNetEntity(machineUid), meta.EntityName));
+        }
+
+        list.Sort((a, b) => string.CompareOrdinal(a.Name, b.Name));
+        return list;
     }
 
     private ProtoId<JobPrototype>? TryGetCurrentJob(EntityUid mindId)
@@ -508,6 +794,87 @@ public sealed class LifeInsuranceSystem : EntitySystem
         if (!TryComp<MindComponent>(mindId, out var mind) || mind.Session == null)
             return;
 
-        RaiseNetworkEvent(new GhostInsuranceRespawnStatusEvent(available, respawnAt), mind.Session.Channel);
+        if (!available)
+        {
+            RaiseNetworkEvent(new GhostInsuranceRespawnStatusEvent(false, respawnAt, true, true), mind.Session.Channel);
+            return;
+        }
+
+        var bound = MindSpawnMachineReady(mindId);
+        var powered = bound && InsuranceSpawnMachineReceivesPower(mindId);
+        RaiseNetworkEvent(new GhostInsuranceRespawnStatusEvent(true, respawnAt, bound, powered), mind.Session.Channel);
+    }
+
+    /// <summary>
+    /// Removes job starting gear except PDA, headset, jumpsuit, shoes, and gloves.
+    /// </summary>
+    private void RestrictInsuranceCloneToBasicRoleGear(EntityUid uid)
+    {
+        if (!_inventory.TryGetSlots(uid, out var slots))
+            return;
+
+        foreach (var slotDef in slots)
+        {
+            if (InsuranceCloneRoleGearSlots.Contains(slotDef.Name))
+                continue;
+
+            if (_inventory.TryUnequip(uid, slotDef.Name, out var removed, silent: true, force: true))
+                QueueDel(removed.Value);
+        }
+    }
+
+    private EntityUid? TryGetPdaUid(EntityUid target)
+    {
+        // PDA is stored in the "id" slot for our insurance clone bodies.
+        if (!_inventory.TryGetSlotEntity(target, "id", out var pdaUid) || pdaUid is null)
+            return null;
+
+        return TryComp<PdaComponent>(pdaUid.Value, out _)
+            ? pdaUid.Value
+            : null;
+    }
+
+    private void TryNotifyPdaOrMind(
+        EntityUid target,
+        EntityUid targetMindId,
+        string header,
+        string message,
+        Color? fallbackColor = null)
+    {
+        var pdaUid = TryGetPdaUid(target);
+
+        // If PDA notifications are enabled, we don't send a chat fallback to avoid repeating.
+        if (pdaUid is { } pdaEnt
+            && TryComp<CartridgeLoaderComponent>(pdaEnt, out var loader)
+            && loader.NotificationsEnabled)
+        {
+            _cartridgeLoader.SendNotification(pdaEnt, header, message, loader);
+            return;
+        }
+
+        // Otherwise, send a colored chat notification.
+        TryNotifyMindSession(targetMindId, $"{header}\n{message}", fallbackColor);
+    }
+
+    private void TryNotifyMindSession(
+        EntityUid mindId,
+        string message,
+        Color? colorOverride = null,
+        string? audioPath = null,
+        float audioVolume = 0f)
+    {
+        if (!TryComp<MindComponent>(mindId, out var mind) || mind.Session == null)
+            return;
+
+        _chatManager.ChatMessageToOne(
+            ChatChannel.Notifications,
+            message,
+            message,
+            EntityUid.Invalid,
+            hideChat: false,
+            mind.Session.Channel,
+            colorOverride: colorOverride,
+            audioPath: audioPath,
+            audioVolume: audioVolume);
     }
 }

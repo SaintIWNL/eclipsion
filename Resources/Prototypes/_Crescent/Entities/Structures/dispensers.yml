@@ -740,6 +740,10 @@
   name: interdyne exotic bioprocessor
   description: A machine that mulches scrap muscle and protein into usable exotic particles.
   components:
+  - type: DispenserRejectedComponents
+    rejectedComponents:
+    - CloneOrgan
+    denyPopup: bioprocessor-interdyne-clone-organ-denied
   - type: Anchorable
     flags:
     - None

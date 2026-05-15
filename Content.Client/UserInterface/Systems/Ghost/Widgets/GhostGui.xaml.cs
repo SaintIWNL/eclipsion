@@ -63,15 +63,28 @@ public sealed partial class GhostGui : UIWidget
         TargetWindow.Populate();
     }
 
-    public void UpdateInsuranceRespawn(bool available, TimeSpan timeLeft)
+    public void UpdateInsuranceRespawn(bool available, TimeSpan timeLeft, bool spawnMachineBound = true, bool spawnMachinePowered = true)
     {
         InsuranceRespawnButton.Visible = available;
         if (!available)
             return;
 
-        var ready = timeLeft <= TimeSpan.Zero;
+        var timerReady = timeLeft <= TimeSpan.Zero;
+        var ready = timerReady && spawnMachineBound && spawnMachinePowered;
         InsuranceRespawnButton.Disabled = !ready;
-        InsuranceRespawnButton.Text = ready
+        if (timerReady && !spawnMachineBound)
+        {
+            InsuranceRespawnButton.Text = Loc.GetString("ghost-gui-insurance-respawn-no-machine");
+            return;
+        }
+
+        if (timerReady && spawnMachineBound && !spawnMachinePowered)
+        {
+            InsuranceRespawnButton.Text = Loc.GetString("ghost-gui-insurance-respawn-no-power");
+            return;
+        }
+
+        InsuranceRespawnButton.Text = timerReady
             ? Loc.GetString("ghost-gui-insurance-respawn-ready")
             : Loc.GetString("ghost-gui-insurance-respawn-timer", ("time", $"{timeLeft.Minutes:D2}:{timeLeft.Seconds:D2}"));
     }

@@ -27,3 +27,15 @@ life-insurance-popup-insufficient-proteins = Insufficient exotic proteins in the
 life-insurance-popup-insufficient-credits = Insufficient credits in your account.
 life-insurance-popup-nothing-to-void = No active policy or pending insurance payout.
 life-insurance-popup-void-success = Insurance policy cancelled.
+life-insurance-spawn-machine-title = Cloning machine
+life-insurance-no-spawn-machines = No clone outlets available
+life-insurance-popup-invalid-spawn-machine = Invalid clone outlet or not found.
+life-insurance-popup-no-spawn-machine-policy = Choose a clone outlet before issuing a policy.
+life-insurance-popup-no-spawn-machine = No clone outlet available. Assign one from the insurance console.
+life-insurance-popup-spawn-unpowered-insured = Your clone outlet has no power. Insurance respawn is unavailable until it is powered.
+life-insurance-popup-clone-emerged = {$name} spills out of the clone outlet.
+life-insurance-pda-notification-header-insured = [color=#4CAF50][bold]!!! INSURANCE ACTIVE !!![/bold][/color]
+life-insurance-pda-notification-message-insured = Interdyne: Your policy is active. Upon death, you will be cloned.
+life-insurance-pda-notification-header-voided = [color=#F44336][bold]!!! INSURANCE VOIDED !!![/bold][/color]
+life-insurance-pda-notification-message-voided = Interdyne: Your policy has been canceled. Upon death, you will not be cloned.
+life-insurance-ghost-notification-message-voided = !!! INSURANCE CANCELED !!!. Someone has voided your insurance.

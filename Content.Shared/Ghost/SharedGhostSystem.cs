@@ -190,11 +190,15 @@ public sealed class GhostInsuranceRespawnStatusEvent : EntityEventArgs
 {
     public readonly bool Available;
     public readonly TimeSpan RespawnAt;
+    public readonly bool SpawnMachineBound;
+    public readonly bool SpawnMachinePowered;
 
-    public GhostInsuranceRespawnStatusEvent(bool available, TimeSpan respawnAt)
+    public GhostInsuranceRespawnStatusEvent(bool available, TimeSpan respawnAt, bool spawnMachineBound = true, bool spawnMachinePowered = true)
     {
         Available = available;
         RespawnAt = respawnAt;
+        SpawnMachineBound = spawnMachineBound;
+        SpawnMachinePowered = spawnMachinePowered;
     }
 }
 }

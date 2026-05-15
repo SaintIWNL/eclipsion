@@ -49,6 +49,7 @@
         - MachineLayer
   - type: EntityStorage
     maxMobCount: 2
+    maxDeadMobCount: 20
     closeSound:
       path: /Audio/Effects/closet_close.ogg
       params:

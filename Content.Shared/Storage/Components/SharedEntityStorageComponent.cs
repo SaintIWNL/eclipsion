@@ -39,9 +39,19 @@ public abstract partial class SharedEntityStorageComponent : Component
     /// <summary>
     /// Maximum number of mobs (entities with BodyComponent) that can be stored.
     /// -1 means no mob-specific limit (uses general Capacity).
+    /// When <see cref="MaxDeadMobCount"/> is non-negative, this applies only to living mobs
+    /// (not in MobState.Dead).
     /// </summary>
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public int MaxMobCount = -1;
+
+    /// <summary>
+    /// When non-negative, maximum number of dead mobs (Body plus MobState.Dead) that can be stored
+    /// alongside living mobs limited by <see cref="MaxMobCount"/>.
+    /// When -1, every mob counts toward <see cref="MaxMobCount"/> only (legacy behavior).
+    /// </summary>
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    public int MaxDeadMobCount = -1;
 
     /// <summary>
     /// Whether or not the entity still has collision when open

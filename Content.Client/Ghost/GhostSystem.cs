@@ -20,6 +20,8 @@ namespace Content.Client.Ghost
         public int AvailableGhostRoleCount { get; private set; }
         public bool InsuranceRespawnAvailable { get; private set; }
         public TimeSpan InsuranceRespawnAt { get; private set; } = TimeSpan.Zero;
+        public bool InsuranceSpawnMachineBound { get; private set; } = true;
+        public bool InsuranceSpawnMachinePowered { get; private set; } = true;
 
         private bool _ghostVisibility = true;
 
@@ -145,6 +147,8 @@ namespace Content.Client.Ghost
 
             InsuranceRespawnAvailable = false;
             InsuranceRespawnAt = TimeSpan.Zero;
+            InsuranceSpawnMachineBound = true;
+            InsuranceSpawnMachinePowered = true;
 
             GhostVisibility = false;
             PlayerRemoved?.Invoke(component);
@@ -163,6 +167,20 @@ namespace Content.Client.Ghost
 
             if (uid != _playerManager.LocalEntity)
                 return;
+
+            // Replicated GhostComponent carries insurance respawn flags from the server; mirror them here so the
+            // ghost HUD matches even if GhostInsuranceRespawnStatusEvent reorders relative to component state.
+            if (InsuranceRespawnAvailable != component.InsuranceRespawnAvailable
+                || InsuranceRespawnAt != component.InsuranceRespawnAt)
+            {
+                InsuranceRespawnAvailable = component.InsuranceRespawnAvailable;
+                InsuranceRespawnAt = component.InsuranceRespawnAt;
+                if (!component.InsuranceRespawnAvailable)
+                {
+                    InsuranceSpawnMachineBound = true;
+                    InsuranceSpawnMachinePowered = true;
+                }
+            }
 
             PlayerUpdated?.Invoke(component);
         }
@@ -193,6 +211,8 @@ namespace Content.Client.Ghost
         {
             InsuranceRespawnAvailable = msg.Available;
             InsuranceRespawnAt = msg.RespawnAt;
+            InsuranceSpawnMachineBound = msg.SpawnMachineBound;
+            InsuranceSpawnMachinePowered = msg.SpawnMachinePowered;
             if (Player != null)
                 PlayerUpdated?.Invoke(Player);
         }
@@ -204,6 +224,8 @@ namespace Content.Client.Ghost
         {
             InsuranceRespawnAvailable = false;
             InsuranceRespawnAt = TimeSpan.Zero;
+            InsuranceSpawnMachineBound = true;
+            InsuranceSpawnMachinePowered = true;
         }
 
         public void RequestWarps()

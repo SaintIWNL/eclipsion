@@ -23,4 +23,16 @@ public sealed partial class LifeInsuranceComponent : Component
 
     [DataField]
     public EntityUid? PendingRespawnStation;
+
+    /// <summary>
+    /// Spawn machine this mind should respawn at when insurance pays out. Set from the insurance console.
+    /// </summary>
+    [DataField]
+    public EntityUid? PreferredSpawnMachine;
+
+    /// <summary>
+    /// Job captured when the policy was issued; used at payout if mind roles no longer expose a job prototype.
+    /// </summary>
+    [DataField]
+    public ProtoId<JobPrototype>? InsuredJobSnapshot;
 }

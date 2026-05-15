@@ -1,0 +1,54 @@
+highp float luma(highp vec3 c)
+{
+    return dot(c, vec3(0.299, 0.587, 0.114));
+}
+
+void fragment()
+{
+    highp vec4 base = zTexture(UV);
+
+    // Layer 1: palette remap (not overlay) into saturated violet/rose/blue tones.
+    highp vec3 darkTone = vec3(0.07, 0.05, 0.12);
+    highp vec3 midTone = vec3(0.34, 0.18, 0.33);
+    highp vec3 lightTone = vec3(0.96, 0.54, 0.72);
+    highp vec3 coldTone = vec3(0.34, 0.49, 1.00);
+    highp float tone = luma(base.rgb);
+    highp vec3 remapped = mix(darkTone, midTone, smoothstep(0.0, 0.58, tone));
+    remapped = mix(remapped, lightTone, smoothstep(0.46, 1.0, tone));
+    remapped = mix(remapped, coldTone, smoothstep(0.42, 1.0, UV.y) * 0.42);
+
+    // Keep detail but avoid the previous grey wash.
+    highp vec3 detail = base.rgb * vec3(0.95, 0.82, 0.98);
+    highp vec3 color = mix(remapped, detail, 0.16);
+
+    // Layer 2: iridescent streaks — quantized to texture pixels (blocky / retro scanlines).
+    highp vec2 px = UV / TEXTURE_PIXEL_SIZE;
+    highp vec2 qpx = floor(px);
+    // Wiggle only on whole pixels so edges stay stepped, not smooth-antialiased ribbons.
+    highp float curve = qpx.y + sin(qpx.x * 0.28) * 2.0 + sin(qpx.y * 0.14) * 1.2 + floor(TIME * 12.0) * 0.08;
+    highp float stripePeriod = 4.0;
+    highp float band = fract(floor(curve) / stripePeriod);
+    // Slightly wider band so stripes read a bit stronger on small organ sprites.
+    highp float streak = smoothstep(0.08, 0.15, band) * (1.0 - smoothstep(0.20, 0.28, band));
+
+    highp vec3 iridescentA = vec3(0.95, 0.48, 0.78);
+    highp vec3 iridescentB = vec3(0.26, 0.50, 1.00);
+    highp float iriPhase = sin(floor(curve) * 0.38 + floor(TIME * 16.0) * 0.31);
+    highp float iriT = floor((0.5 + 0.5 * iriPhase) * 5.0) / 5.0;
+    highp vec3 iridescent = mix(iridescentA, iridescentB, iriT);
+    color = mix(color, iridescent, streak * 0.48);
+
+    // Chromatic micro-fringe.
+    highp float xEdge = (zTexture(UV + vec2(TEXTURE_PIXEL_SIZE.x, 0.0)).a -
+                         zTexture(UV - vec2(TEXTURE_PIXEL_SIZE.x, 0.0)).a) * 0.08;
+    highp float yEdge = (zTexture(UV + vec2(0.0, TEXTURE_PIXEL_SIZE.y)).a -
+                         zTexture(UV - vec2(0.0, TEXTURE_PIXEL_SIZE.y)).a) * 0.05;
+    color.r += xEdge;
+    color.g += yEdge * 0.35;
+    color.b -= xEdge * 0.45;
+
+    // Slight contrast lift to avoid muddy mid-tones.
+    color = (color - 0.5) * 1.08 + 0.5;
+
+    COLOR = vec4(clamp(color, 0.0, 1.0), base.a);
+}

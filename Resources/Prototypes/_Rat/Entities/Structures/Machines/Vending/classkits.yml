@@ -122,6 +122,68 @@
 
 - type: entity
   parent: ColMarTechBase
+  id: ColMarTechEquipmentInterdyne
+  name: автоматическая стойка снаряжения интердайна
+  description: Автоматизированный стеллаж, соединенный с колоссальным хранилищем стандартного снаряжения Interdyne Pharmaceuticals.
+  components:
+  - type: AccessReader
+    access:
+    - [ "SyndicateInterdyne" ]
+  - type: Sprite
+    sprite: _Crescent/Structures/syndicatearmory.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - TraumasecNCSP
+    - RipperdocNCSP
+    - CoordinatorNCSP
+    sections:
+    - name: Стандартный набор
+      choices: { CMClass: 1 }
+      entries:
+      - id: CMVendorBundleIPMApparel
+        name: стандартный набор
+        recommended: true
+    - name: Броня
+      choices: { CMArmour: 1 }
+      entries:
+      - id: ClothingOuterHardsuitTraumasec
+        name: скафандр Interdyne TraumaSec
+        recommended: true
+      - id: ClothingOuterArmorSyndicateArmorvestInterdyne
+        name: баллистический жилет TraumaSec
+    - name: Основное оружие
+      choices: { CMWeapon: 1 }
+      entries:
+      - id: WeaponRifleKrinkov
+        name: КВСТ АКС-74У Кринков 5.56x45 мм
+        recommended: true
+      - id: WeaponSubMachineGunAtreides
+        name: Атрейдес
+      - id: WeaponShotgunNCSPSaiga12
+        name: КВСТ Сайга-12к Молот 12 кал.
+    - name: EVA и утилиты
+      choices: { CMUtilities: 2 }
+      entries:
+      - id: HandHeldMassScannerEE
+        name: портативный сканер масс
+        recommended: true
+      - id: SHIHG7FlashbangHandgrenade
+        name: светошумовая граната ТПШ HG-07
+      - id: F1Handgrenade
+        name: Граната Ф-1
+    - name: Боеприпасы
+      choices: { CMAmmo: 2 }
+      entries:
+      - id: MagazineLightRifle
+        name: 30-зарядный магазин (5,56x45 мм)
+        recommended: true
+      - id: MagazinePistolSubMachineGun
+        name: 35-зарядный магазин для пистолета-пулемета (9x19 мм PSTF auto)
+      - id: MagazineShotgun
+        name: 10-зарядный магазин (12 калибр)
+
+- type: entity
+  parent: ColMarTechBase
   id: ColMarTechEquipmentCMM
   name: автоматическая стойка снаряжения минитменов
   description: Автоматизированный стеллаж, соединенный с колоссальным хранилищем стандартного снаряжения минитменов.
