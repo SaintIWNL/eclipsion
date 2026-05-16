@@ -13,6 +13,13 @@ ent-SignalTransmitterDevice = Signal Transmitter
 transmitter-already-activated = The transmitter is already activated!
 transmitter-timer-already-active = A timer is already active!
 transmitter-not-anchored = Anchor the transmitter first!
+transmitter-wrong-code = Wrong code!
+
+transmitter-ui-title = Signal Transmitter
+transmitter-ui-status-input-code = Enter activation code
+transmitter-ui-status-activated = DEVICE ACTIVATED
+transmitter-ui-code-display = Code: {$code}
+transmitter-ui-code-accepted = Code accepted
 
 transmitter-sender = Signal Transmitter
 transmitter-activated-announcement = WARNING! Signal transmitter activated! {$minutes} minutes remaining!

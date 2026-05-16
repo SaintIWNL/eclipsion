@@ -52,6 +52,12 @@
     delay: 3
   - type: SignalTransmitterDevice
   - type: Anchorable
+  - type: ActivatableUI
+    key: enum.Content.Shared._Rat.SignalTransmitter.SignalTransmitterUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.Content.Shared._Rat.SignalTransmitter.SignalTransmitterUiKey.Key:
+        type: Content.Client._Rat.SignalTransmitter.TransmitterBui
   - type: Construction
     graph: SignalTransmitterDevice
     node: transmitter

@@ -13,6 +13,13 @@ ent-SignalTransmitterDevice = Сигнальный передатчик
 transmitter-already-activated = Передатчик уже активирован!
 transmitter-timer-already-active = Таймер уже запущен!
 transmitter-not-anchored = Сначала закрепите передатчик!
+transmitter-wrong-code = Неверный код!
+
+transmitter-ui-title = Сигнальный передатчик
+transmitter-ui-status-input-code = Введите код активации
+transmitter-ui-status-activated = УСТРОЙСТВО АКТИВИРОВАНО
+transmitter-ui-code-display = Код: {$code}
+transmitter-ui-code-accepted = Код принят
 
 transmitter-sender = Сигнальный передатчик
 transmitter-activated-announcement = ВНИМАНИЕ! Сигнальный передатчик активирован! Осталось {$minutes} минут!
