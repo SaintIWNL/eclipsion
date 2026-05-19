@@ -935,5 +935,14 @@ Entries:
     id: 112
     time: '2026-05-18T14:17:49.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/223
+  - author: ChangelingRUES
+    changes:
+      - type: Tweak
+        message: Изменена цена Дюгонь и Гарпии на более щадящую. Дюгонь получила консоль связи. Гарпия получила пару 200сс для самозащиты.
+      - type: Fix
+        message: Исправлен баг с консолями пилота там, где они не спавнились.
+    id: 113
+    time: '2026-05-19T12:00:33.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/220
 Name: Rat
 Order: -1
