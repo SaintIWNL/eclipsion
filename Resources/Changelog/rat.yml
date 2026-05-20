@@ -951,5 +951,12 @@ Entries:
     id: 114
     time: '2026-05-20T12:31:25.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/227
+  - author: NEirotoXiN00
+    changes:
+      - type: Fix
+        message: Исправлена ошибка при которой трупы впитывали выстрелы.
+    id: 115
+    time: '2026-05-20T15:25:32.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/229
 Name: Rat
 Order: -1
