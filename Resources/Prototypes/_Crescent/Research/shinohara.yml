@@ -207,7 +207,19 @@
   recipeUnlocks:
   - NazaarLPC
   - MusinyaneLPC
-
+  
+- type: technology
+  id: ShinoharaHeavyDestroyer
+  name: research-technology-shinohara-corpsec-shark
+  icon:
+    sprite: _Crescent/Objects/Misc/lpcchip.rsi
+    state: icon
+  discipline: Corporate
+  tier: 2
+  cost: 9000
+  recipeUnlocks:
+  - SharkLPC
+  
 - type: technology
   id: ShinoharaAdvancedMaterials
   name: research-technology-shinohara-advancedmaterials
@@ -343,7 +355,7 @@
     state: icon
   discipline: Corporate
   tier: 2
-  cost: 8000
+  cost: 10000
   recipeUnlocks:
   - FujinLPC
 

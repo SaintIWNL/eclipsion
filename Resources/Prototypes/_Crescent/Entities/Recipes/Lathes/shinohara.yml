@@ -666,6 +666,15 @@
     ShipHull: 5000
 
 - type: latheRecipe
+  id: SharkLPC
+  result: ShipVoucherShark
+  completetime: 1
+  materials:
+    StarshipEngineComponents: 5000
+    ShipComponents: 4000
+    ShipHull: 8500
+    
+- type: latheRecipe
   id: FleaLPC
   result: ShipVoucherFlea
   completetime: 1
