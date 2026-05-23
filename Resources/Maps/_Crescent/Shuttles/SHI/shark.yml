@@ -3706,8 +3706,8 @@ entities:
           - Toggle
     - type: NamedModules
       buttonNames:
-      - Авто-залп 300сс Плазма-Пушка
-      - Залп 95мм ракетой
+      - Авто-залп из 300сс
+      - Empty Module
       - Empty Module
       - Empty Module
       - Empty Module
