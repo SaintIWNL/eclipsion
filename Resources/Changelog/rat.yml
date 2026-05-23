@@ -990,5 +990,16 @@ Entries:
     id: 119
     time: '2026-05-23T11:59:19.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/233
+  - author: ChangelingRUES
+    changes:
+      - type: Tweak
+        message: Изменена цена крафта ТПШ Акула, немного повысилась, сам шаттл претерпел малые изменения.
+      - type: Tweak
+        message: Цена крафта ТПШ Фуджин возросла.
+      - type: Fix
+        message: Исправлены первые баги ТПШ Акула.
+    id: 120
+    time: '2026-05-23T11:59:31.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/235
 Name: Rat
 Order: -1
