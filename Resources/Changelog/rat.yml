@@ -1001,5 +1001,14 @@ Entries:
     id: 120
     time: '2026-05-23T11:59:31.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/235
+  - author: ChangelingRUES
+    changes:
+      - type: Fix
+        message: Лёгкое исправление ТПШ Акула, просто проводка.
+      - type: Fix
+        message: Лёгкое исправление ТПШ Фуджин, пушки в консоли пилота теперь обозначены.
+    id: 121
+    time: '2026-05-24T10:40:03.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/236
 Name: Rat
 Order: -1
