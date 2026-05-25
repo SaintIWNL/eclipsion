@@ -13,7 +13,7 @@ public sealed partial class DiscordAuthGui : Control
     [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
     [Dependency] private readonly DiscordAuthManager _discordAuthManager = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
-    private TimeSpan? _skipButtonResetOn;
+    // private TimeSpan? _skipButtonResetOn;
 
     public DiscordAuthGui()
     {
@@ -47,35 +47,35 @@ public sealed partial class DiscordAuthGui : Control
         {
             uriOpener.OpenUri(DiscordAuthManager.DiscordServerLink);
         };
-        SkipButton.OnPressed += OnSkipButtonPressed;
+        // SkipButton.OnPressed += OnSkipButtonPressed;
     }
 
-    protected override void FrameUpdate(FrameEventArgs args)
-    {
-        base.FrameUpdate(args);
+//    protected override void FrameUpdate(FrameEventArgs args)
+//    {
+//        base.FrameUpdate(args);
+//
+//        if (_skipButtonResetOn != null && _gameTiming.CurTime > _skipButtonResetOn)
+//            ResetSkipButton();
+//    }
 
-        if (_skipButtonResetOn != null && _gameTiming.CurTime > _skipButtonResetOn)
-            ResetSkipButton();
-    }
+//    private void OnSkipButtonPressed(BaseButton.ButtonEventArgs args)
+//    {
+//        if (_skipButtonResetOn is null)
+//        {
+//            _skipButtonResetOn = _gameTiming.CurTime.Add(TimeSpan.FromSeconds(3));
+//            SkipButton.ModulateSelfOverride = Color.DarkRed;
+//            SkipButton.Text = Loc.GetString("stalker-discord-auth-skip-confirm");
+//            return;
+//        }
+//
+//        _discordAuthManager.OnAuthSkip();
+//        ResetSkipButton();
+//    }
 
-    private void OnSkipButtonPressed(BaseButton.ButtonEventArgs args)
-    {
-        if (_skipButtonResetOn is null)
-        {
-            _skipButtonResetOn = _gameTiming.CurTime.Add(TimeSpan.FromSeconds(3));
-            SkipButton.ModulateSelfOverride = Color.DarkRed;
-            SkipButton.Text = Loc.GetString("stalker-discord-auth-skip-confirm");
-            return;
-        }
-
-        _discordAuthManager.OnAuthSkip();
-        ResetSkipButton();
-    }
-
-    private void ResetSkipButton()
-    {
-        _skipButtonResetOn = null;
-        SkipButton.ModulateSelfOverride = null;
-        SkipButton.Text = Loc.GetString("stalker-discord-auth-skip");
-    }
+//    private void ResetSkipButton()
+//    {
+//        _skipButtonResetOn = null;
+//        SkipButton.ModulateSelfOverride = null;
+//        SkipButton.Text = Loc.GetString("stalker-discord-auth-skip");
+//    }
 }
