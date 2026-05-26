@@ -1010,5 +1010,12 @@ Entries:
     id: 121
     time: '2026-05-24T10:40:03.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/236
+  - author: shad4338
+    changes:
+      - type: Add
+        message: ЛРНП были добавлены новые плащи для командных ролей, они находятся в лодауте.
+    id: 122
+    time: '2026-05-26T07:19:50.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/232
 Name: Rat
 Order: -1
