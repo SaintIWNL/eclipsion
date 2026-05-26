@@ -1,0 +1,36 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc techshare-receiver-title}"
+               MinSize="450 450">
+    <BoxContainer Orientation="Vertical" Margin="10">
+        <Label Name="StatusLabel" Text="{Loc techshare-receiver-status-idle}" StyleClasses="LabelHeading" Margin="0 0 0 10" />
+
+        <BoxContainer Name="IdlePanel" Orientation="Vertical">
+            <Label Text="{Loc techshare-receiver-no-requests}" Margin="0 0 0 5" />
+        </BoxContainer>
+
+        <BoxContainer Name="PendingPanel" Orientation="Vertical" Visible="False">
+            <Label Name="PendingLabel" Text="{Loc techshare-receiver-pending-default}" Margin="0 0 0 5" />
+            <Label Name="PendingModeLabel" Text="" Margin="0 0 0 3" />
+            <Label Name="PendingDurationLabel" Text="" Margin="0 0 0 3" />
+            <Label Text="{Loc techshare-receiver-offered-recipes}" Margin="0 0 0 3" />
+            <ScrollContainer MinSize="0 100" Margin="0 0 0 5">
+                <BoxContainer Name="PendingRecipeListContainer" Orientation="Vertical" />
+            </ScrollContainer>
+            <BoxContainer Orientation="Horizontal" Margin="0 0 0 5">
+                <Button Name="AcceptButton" Text="{Loc techshare-receiver-accept}" HorizontalExpand="True" Margin="0 0 5 0" />
+                <Button Name="RejectButton" Text="{Loc techshare-receiver-reject}" HorizontalExpand="True" />
+            </BoxContainer>
+        </BoxContainer>
+
+        <BoxContainer Name="ConnectedPanel" Orientation="Vertical" Visible="False">
+            <Label Name="ConnectedLabel" Text="{Loc techshare-connected-default}" Margin="0 0 0 5" />
+            <Label Name="ConnectedModeLabel" Text="" Margin="0 0 0 3" />
+            <Label Name="TimerLabel" Text="{Loc techshare-time-default}" Margin="0 0 0 3" />
+            <Label Text="{Loc techshare-receiver-shared-recipes}" Margin="0 0 0 3" />
+            <ScrollContainer MinSize="0 100" Margin="0 0 0 5">
+                <BoxContainer Name="ConnectedRecipeListContainer" Orientation="Vertical" />
+            </ScrollContainer>
+            <Button Name="DisconnectButton" Text="{Loc techshare-disconnect}" />
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>

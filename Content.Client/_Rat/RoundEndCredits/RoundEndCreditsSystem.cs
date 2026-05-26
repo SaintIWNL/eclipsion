@@ -21,7 +21,8 @@ public sealed class RoundEndCreditsSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeNetworkEvent<RoundEndCreditsEvent>(OnCreditsReceived);
+        // Отключено до нормальной реализации		
+        // SubscribeNetworkEvent<RoundEndCreditsEvent>(OnCreditsReceived);
     }
 
     private void OnCreditsReceived(RoundEndCreditsEvent ev)

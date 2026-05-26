@@ -923,7 +923,27 @@
   - type: ReverseEngineering # SectorCrescent
     recipes:
       - FujinLPC
-
+      
+- type: entity
+  parent: BaseItem
+  id: ShipVoucherShark
+  name: CSEC 'Shark' pattern LPC fabprint disk
+  description: An LPC fabprint disk loaded with a CorpSec Shark-class security heavy destroyer pattern. Has to be redeemed at a shipyard console.
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _Crescent/Objects/Misc/lpcchip.rsi
+    layers:
+    - state: icon
+  - type: StaticPrice
+    price: 2500
+  - type: ShipVoucher
+    ship: Shark
+  - type: ReverseEngineering # SectorCrescent
+    recipes:
+      - SharkLPC
+      
 #ncsp
 
 - type: entity

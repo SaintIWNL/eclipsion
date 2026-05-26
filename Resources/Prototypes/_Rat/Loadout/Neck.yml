@@ -1,0 +1,41 @@
+- type: loadout
+  id: LoadoutClothingNeckGeneralCloak
+  category: Neck
+  cost: 1
+  customColorTint: false
+  items:
+    - ClothingNeckGeneralCloak
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutOuter
+    - !type:CharacterJobRequirement
+      jobs:
+        - CommandantNCWL
+
+- type: loadout
+  id: LoadoutClothingNeckKommissarCloak
+  category: Neck
+  cost: 1
+  customColorTint: false
+  items:
+    - ClothingNeckKommissarCloak
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutOuter
+    - !type:CharacterJobRequirement
+      jobs:
+        - KommissarNCWL
+
+- type: loadout
+  id: LoadoutClothingNeckKommandantMantle
+  category: Neck
+  cost: 1
+  customColorTint: false
+  items:
+    - ClothingNeckKommandantMantle
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutOuter
+    - !type:CharacterJobRequirement
+      jobs:
+        - FleetkapitanNCWL

@@ -944,5 +944,78 @@ Entries:
     id: 113
     time: '2026-05-19T12:00:33.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/220
+  - author: ChangelingRUES
+    changes:
+      - type: Fix
+        message: Исправлен шаттл ПК Rockchipper
+    id: 114
+    time: '2026-05-20T12:31:25.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/227
+  - author: NEirotoXiN00
+    changes:
+      - type: Fix
+        message: Исправлена ошибка при которой трупы впитывали выстрелы.
+    id: 115
+    time: '2026-05-20T15:25:32.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/229
+  - author: furo8484-wq
+    changes:
+      - type: Fix
+        message: Теперь безгильзовые патроны можно крафтить на микро кузне
+    id: 116
+    time: '2026-05-20T16:59:24.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/230
+  - author: ChangelingRUES
+    changes:
+      - type: Add
+        message: 'Добавлен Т2+ корабль: Тяжёлый Эсминец ТПШ Акула. Получение корабля строго через РНД и его крафт.'
+    id: 117
+    time: '2026-05-22T12:44:27.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/231
+  - author: Gr-avity
+    changes:
+      - type: Add
+        message: Научная станция by Vladislaiv
+    id: 118
+    time: '2026-05-22T16:08:58.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/234
+  - author: ChangelingRUES
+    changes:
+      - type: Add
+        message: Добавлен фабрикатор корабельных снарядов и пара ящиков БК 20-35мм для баллистических пушек шаттлов.
+      - type: Tweak
+        message: 'Изменения в шлюзах Анвила: были переставлены в арсенал, чтобы вы могли пойти по кругу!'
+      - type: Fix
+        message: Исправлены орудия Анвила, теперь стоят корректно.
+    id: 119
+    time: '2026-05-23T11:59:19.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/233
+  - author: ChangelingRUES
+    changes:
+      - type: Tweak
+        message: Изменена цена крафта ТПШ Акула, немного повысилась, сам шаттл претерпел малые изменения.
+      - type: Tweak
+        message: Цена крафта ТПШ Фуджин возросла.
+      - type: Fix
+        message: Исправлены первые баги ТПШ Акула.
+    id: 120
+    time: '2026-05-23T11:59:31.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/235
+  - author: ChangelingRUES
+    changes:
+      - type: Fix
+        message: Лёгкое исправление ТПШ Акула, просто проводка.
+      - type: Fix
+        message: Лёгкое исправление ТПШ Фуджин, пушки в консоли пилота теперь обозначены.
+    id: 121
+    time: '2026-05-24T10:40:03.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/236
+  - author: shad4338
+    changes:
+      - type: Add
+        message: ЛРНП были добавлены новые плащи для командных ролей, они находятся в лодауте.
+    id: 122
+    time: '2026-05-26T07:19:50.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/232
 Name: Rat
 Order: -1

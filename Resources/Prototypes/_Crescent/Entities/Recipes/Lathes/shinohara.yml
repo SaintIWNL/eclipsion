@@ -666,6 +666,15 @@
     ShipHull: 5000
 
 - type: latheRecipe
+  id: SharkLPC
+  result: ShipVoucherShark
+  completetime: 1
+  materials:
+    StarshipEngineComponents: 6000
+    ShipComponents: 5000
+    ShipHull: 9000
+    
+- type: latheRecipe
   id: FleaLPC
   result: ShipVoucherFlea
   completetime: 1
@@ -681,7 +690,7 @@
   materials:
     StarshipEngineComponents: 5000
     ShipComponents: 6000
-    ShipHull: 7000
+    ShipHull: 10000
 
 # MARK: Flatpacks
 

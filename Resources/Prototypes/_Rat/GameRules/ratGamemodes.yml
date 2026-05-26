@@ -29,11 +29,6 @@
         posY: 7000
         IFFColor: "#C677A5"
         IFFFaction: DSM
-      GliessSanto:
-        gameMapID: GliessSanto
-        posX: -5000
-        posY: 3000
-        IFFColor: "#36B500"
       Tatsumoto:
         gameMapID: Tatsumoto
         posX: -6000
@@ -78,6 +73,10 @@
         gameMapID: RatKovf
         posX: 500
         posY: -4300
+      RatResearchLabratory:
+        gameMapID: RatResearchLabratory
+        posX: -2000
+        posY: 2000
 
 - type: gamePreset
   id: RatAdventureWar

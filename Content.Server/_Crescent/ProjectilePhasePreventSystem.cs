@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Numerics;
 using Content.Shared._Crescent;
 using Content.Shared.Projectiles;
@@ -16,8 +15,9 @@ public sealed class ProjectilePhasePreventerSystem : EntitySystem
 
     private EntityQuery<PhysicsComponent> _physicsQuery;
     private EntityQuery<FixturesComponent> _fixturesQuery;
+    private EntityQuery<TransformComponent> _xformQuery;
 
-    private readonly HashSet<Entity<ProjectilePhasePreventComponent, ProjectileComponent>> _projectiles = new();
+    private readonly Dictionary<EntityUid, Entity<ProjectilePhasePreventComponent, ProjectileComponent>> _projectiles = new();
 
     private ISawmill _sawmill = default!;
 
@@ -36,6 +36,7 @@ public sealed class ProjectilePhasePreventerSystem : EntitySystem
 
         _physicsQuery = GetEntityQuery<PhysicsComponent>();
         _fixturesQuery = GetEntityQuery<FixturesComponent>();
+        _xformQuery = GetEntityQuery<TransformComponent>();
 
         _sawmill = _logs.GetSawmill("Phase-Prevention");
     }
@@ -52,22 +53,19 @@ public sealed class ProjectilePhasePreventerSystem : EntitySystem
         comp.start = _trans.GetWorldPosition(uid);
         comp.mapId = _trans.GetMapId(uid);
 
-        _projectiles.Add((uid, comp, projectile));
+        _projectiles[uid] = (uid, comp, projectile);
     }
 
     private void OnShutdown(EntityUid uid, ProjectilePhasePreventComponent comp, ref ComponentShutdown args)
     {
-        if (!TryComp<ProjectileComponent>(uid, out var projectile))
-            return;
-
-        _projectiles.Remove((uid, comp, projectile));
+        _projectiles.Remove(uid);
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        foreach (var (owner, phase, projectile) in _projectiles)
+        foreach (var (owner, phase, projectile) in _projectiles.Values)
         {
             if (TerminatingOrDeleted(owner))
                 continue;
@@ -100,97 +98,84 @@ public sealed class ProjectilePhasePreventerSystem : EntitySystem
                 continue;
 
             var direction = delta / distance;
-            var perpendicular = new Vector2(-direction.Y, direction.X);
-            var rayStarts = new[]
-            {
-                previousPos,
-            };
 
-            var bulletFixturePair = bulletFixtures.Fixtures.First();
+            KeyValuePair<string, Fixture> bulletFixturePair = default;
+            foreach (var kv in bulletFixtures.Fixtures) { bulletFixturePair = kv; break; }
             var bulletFixtureKey = bulletFixturePair.Key;
 
             var ignoredGrid = EntityUid.Invalid;
 
             if (projectile.Weapon != null &&
-                TryComp<TransformComponent>(projectile.Weapon, out var weaponXform) &&
+                _xformQuery.TryGetComponent(projectile.Weapon, out var weaponXform) &&
                 weaponXform.GridUid != null)
             {
                 ignoredGrid = weaponXform.GridUid.Value;
             }
 
-            var hitSomething = false;
+            var ray = new CollisionRay(previousPos, direction, phase.relevantBitmasks);
 
-            foreach (var rayStart in rayStarts)
+            foreach (var hit in _phys.IntersectRay(
+                         currentMap,
+                         ray,
+                         distance + RaycastExtraDistance,
+                         projectile.Weapon,
+                         false))
             {
-                var ray = new CollisionRay(rayStart, direction, phase.relevantBitmasks);
+                var hitEntity = hit.HitEntity;
 
-                foreach (var hit in _phys.IntersectRay(
-                             currentMap,
-                             ray,
-                             distance + RaycastExtraDistance,
-                             projectile.Weapon,
-                             false))
+                if (hitEntity == owner)
+                    continue;
+
+                if (projectile.IgnoreShooter && projectile.Shooter == hitEntity)
+                    continue;
+
+                if (projectile.IgnoredEntities.Contains(hitEntity))
+                    continue;
+
+                if (!_xformQuery.TryGetComponent(hitEntity, out var hitXform))
+                    continue;
+
+                if (projectile.IgnoreWeaponGrid &&
+                    ignoredGrid != EntityUid.Invalid &&
+                    hitXform.GridUid == ignoredGrid)
                 {
-                    var hitEntity = hit.HitEntity;
-
-                    if (hitEntity == owner)
-                        continue;
-
-                    if (projectile.IgnoreShooter && projectile.Shooter == hitEntity)
-                        continue;
-
-                    if (projectile.IgnoredEntities.Contains(hitEntity))
-                        continue;
-
-                    if (!TryComp<TransformComponent>(hitEntity, out var hitXform))
-                        continue;
-
-                    if (projectile.IgnoreWeaponGrid &&
-                        ignoredGrid != EntityUid.Invalid &&
-                        hitXform.GridUid == ignoredGrid)
-                    {
-                        continue;
-                    }
-
-                    if (!_physicsQuery.TryGetComponent(hitEntity, out _))
-                        continue;
-
-                    if (!_fixturesQuery.TryGetComponent(hitEntity, out var targetFixtures))
-                        continue;
-
-                    if (targetFixtures.Fixtures.Count == 0)
-                        continue;
-
-                    var targetFixturePair = targetFixtures.Fixtures.First();
-
-                    var bulletEvent = new HullrotBulletHitEvent
-                    {
-                        selfEntity = owner,
-                        hitEntity = hitEntity,
-                        selfFixtureKey = bulletFixtureKey,
-                        targetFixture = targetFixturePair.Value,
-                        targetFixtureKey = targetFixturePair.Key,
-                        selfPhys = bulletPhysics
-                    };
-
-                    try
-                    {
-                        RaiseLocalEvent(owner, ref bulletEvent, true);
-                    }
-                    catch (Exception e)
-                    {
-                        _sawmill.Error($"Failed to raise phase-prevent hit event: {e}");
-                    }
-
-                    hitSomething = true;
-                    break;
+                    continue;
                 }
 
-                if (hitSomething)
-                    break;
+                if (!_physicsQuery.TryGetComponent(hitEntity, out _))
+                    continue;
+
+                if (!_fixturesQuery.TryGetComponent(hitEntity, out var targetFixtures))
+                    continue;
+
+                if (targetFixtures.Fixtures.Count == 0)
+                    continue;
+
+                KeyValuePair<string, Fixture> targetFixturePair = default;
+                foreach (var kv in targetFixtures.Fixtures) { targetFixturePair = kv; break; }
+
+                var bulletEvent = new HullrotBulletHitEvent
+                {
+                    selfEntity = owner,
+                    hitEntity = hitEntity,
+                    selfFixtureKey = bulletFixtureKey,
+                    targetFixture = targetFixturePair.Value,
+                    targetFixtureKey = targetFixturePair.Key,
+                    selfPhys = bulletPhysics
+                };
+
+                try
+                {
+                    RaiseLocalEvent(owner, ref bulletEvent, true);
+                }
+                catch (Exception e)
+                {
+                    _sawmill.Error($"Failed to raise phase-prevent hit event: {e}");
+                }
+
+                break;
             }
 
-            // Update after all raycasts.
             phase.start = currentPos;
             phase.mapId = currentMap;
         }
