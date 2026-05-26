@@ -3626,14 +3626,7 @@ entities:
           - Toggle
         3:
         - - Group4
-          - Toggle
-    - type: NamedModules
-      buttonNames:
-      - Откр/Закр фронтальные гермодвери
-      - Залп 95мм ракетой
-      - Авто-залп из 600сс
-      - Авто-залп 300сс ЭМИ
-      - Empty Module      
+          - Toggle    
     - type: ContainerContainer
       containers:
         board: !type:Container
