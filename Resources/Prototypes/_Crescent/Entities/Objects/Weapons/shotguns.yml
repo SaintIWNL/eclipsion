@@ -667,3 +667,7 @@
     shotgunSpreadMultiplier: 0.15
     soundGunshot:
       path: /Audio/_Crescent/Weapons/Guns/supressed_shotgun/suppressed_shotgun_fire.ogg
+  - type: ReverseEngineering 
+    difficulty: 2
+    recipes:
+      - WeaponShotgunHarba
