@@ -1026,5 +1026,14 @@ Entries:
     id: 123
     time: '2026-05-27T07:11:23.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/237
+  - author: nabegator220
+    changes:
+      - type: Add
+        message: Freeport
+      - type: Tweak
+        message: Balance update late may 26
+    id: 124
+    time: '2026-05-27T12:28:44.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/242
 Name: Rat
 Order: -1
