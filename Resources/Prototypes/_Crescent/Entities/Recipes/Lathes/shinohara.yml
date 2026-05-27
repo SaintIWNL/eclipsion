@@ -164,10 +164,10 @@
   result: ClothingOuterHardsuitHighsec
   completetime: 2
   materials:
-    Durathread: 1500
-    Steel: 2500
+    Durathread: 1000 #ratgore, buff to price since it's now worse
+    Steel: 1000
     Tungsten: 500
-    HardsuitElectronics: 500
+    HardsuitElectronics: 300
 
 - type: latheRecipe
   id: ClothingOuterHardsuitHighsecIndependent

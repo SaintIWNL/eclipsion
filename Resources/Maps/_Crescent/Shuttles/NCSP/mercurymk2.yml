@@ -1104,8 +1104,8 @@ entities:
           - SpaceArtilleryFire
     - type: NamedModules
       buttonNames:
-      - Toggle 50mm cannon
-      - Fire 50mm cannon
+      - Toggle 35mm cannon
+      - Fire 35mm cannon
       - Module C
       - Module D
       - Module E
@@ -2336,7 +2336,7 @@ entities:
     - type: Transform
       pos: 0.5,-3.5
       parent: 1
-- proto: WeaponTurretSmallArtillery
+- proto: WeaponTurretMediumMachinegun
   entities:
   - uid: 240
     components:

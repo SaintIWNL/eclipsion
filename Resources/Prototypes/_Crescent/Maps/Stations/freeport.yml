@@ -25,17 +25,17 @@
             proper: true
         - type: StationJobs
           overflowJobs: []
-          availableJobs:
+          availableJobs: #28 pop - ratgore
             RingleaderNCSP: [ 1, 1 ]
             LieutenantNCSP: [ 1, 1 ]
             InfanteerNCSP: [ 4, 4 ]
             TechnicianNCSP: [ 2, 2 ]
             CoordinatorNCSP: [ 1, 1 ]
-            TraumasecNCSP: [ 2, 2 ]
+            TraumasecNCSP: [ 3, 3 ]
             RipperdocNCSP: [ 2, 2 ]
             IntelligenceOfficerNCSP: [ 1, 1 ]
             OperativeNCSP: [ 4, 4 ]
-            CyberdawnTechNCSP: [ 3, 3 ]
+            CyberdawnTechNCSP: [ 2, 2 ]
             ForemanNCSP: [ 1, 1 ]
-            ShipbreakerNCSP: [ 4, 4 ]
-            Contractor: [ 15, 15 ]
+            ShipbreakerNCSP: [ 6, 6 ]
+            # Contractor: [ 15, 15 ] - ratgore

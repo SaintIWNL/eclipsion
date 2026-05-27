@@ -43,28 +43,10 @@
         IFFFaction: SRM
         randomOffsetX: 2000
         randomOffsetY: 2000
-      Dochenskaya:
-        gameMapID: Dochenskaya
-        posX: 6000
-        posY: 1000
-        IFFColor: IndianRed
-        IFFFaction: TFSC
-      Jackal:
-        gameMapID: Jackal
-        posX: 8000
+      Freeport:
+        gameMapID: Freeport
+        posX: 7000
         posY: -2000
-        IFFColor: IndianRed
-        IFFFaction: TFSC
-      Dawnbreaker:
-        gameMapID: Dawnbreaker
-        posX: 6000
-        posY: -1000
-        IFFColor: IndianRed
-        IFFFaction: TFSC
-      Hayes:
-        gameMapID: Hayes
-        posX: 5000
-        posY: -4000
         IFFColor: IndianRed
         IFFFaction: TFSC
       TribalHideout:

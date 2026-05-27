@@ -980,14 +980,14 @@
   - type: Clothing
     sprite: _Crescent/Objects/Weapons/Guns/barghest.rsi
   - type: Gun
-    fireRate: 4
+    fireRate: 3.5
     soundGunshot:
       path: /Audio/_Crescent/Weapons/Guns/dmr_1/dmr_gunshot_2.ogg
     selectedMode: Burst
     availableModes:
       - SemiAuto
       - Burst
-    shotsPerBurst: 3
+    shotsPerBurst: 2
     burstFireRate: 8
     burstCooldown: 0.5
     damageModifier: 0.8

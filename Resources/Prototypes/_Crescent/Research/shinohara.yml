@@ -116,8 +116,6 @@
   - ClothingHeadHatShinoharaHelmet
   - ClothingHeadHatShinoharaHelmetUA
   - ClothingOuterHardsuitHighsec
-  - ClothingOuterHardsuitHighsecUA
-  - ClothingOuterHardsuitHighsecIndependent
 
 - type: technology
   id: ShinoharaDisposableGuns
@@ -473,7 +471,9 @@
   cost: 12500
   recipeUnlocks:
   - ClothingOuterHardsuitSHIJuggernaut
-#  - ClothingOuterHardsuitSHISpeedsuit
+  - ClothingOuterHardsuitHighsecUA #ratgore, moved UAs here
+  - ClothingOuterHardsuitHighsecIndependent
+  - ClothingOuterHardsuitSHISpeedsuit
 
 - type: technology
   id: ShinoharaNTBallistics

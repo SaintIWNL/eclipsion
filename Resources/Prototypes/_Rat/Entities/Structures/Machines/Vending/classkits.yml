@@ -294,9 +294,10 @@
       entries:
       - id: ClothingOuterHardsuitHighsec
         name: боевой скафандр "Шиногара" SVBT-2
-      - id: ClothingOuterHardsuitHighsecUA
-        name: боевой скафандр "Шиногара" SVBT-2-UA
         recommended: true
+      #- id: ClothingOuterHardsuitHighsecUA
+      #  name: боевой скафандр "Шиногара" SVBT-2-UA
+      #  recommended: true
     - name: Основное оружие
       choices: { CMWeapon: 1 }
       entries:
