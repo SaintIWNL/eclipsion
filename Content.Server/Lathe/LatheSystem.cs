@@ -256,8 +256,12 @@ namespace Content.Server.Lathe
                 }
             }
 
+            var completedRecipe = comp.CurrentRecipe;
             comp.CurrentRecipe = null;
             prodComp.StartTime = _timing.CurTime;
+
+            if (completedRecipe != null)
+                OnProductionComplete(uid, completedRecipe);
 
             if (!TryStartProducing(uid, comp))
             {
@@ -265,6 +269,12 @@ namespace Content.Server.Lathe
                 UpdateUserInterfaceState(uid, comp);
                 UpdateRunningAppearance(uid, false);
             }
+        }
+
+        public void OnProductionComplete(EntityUid uid, LatheRecipePrototype recipe)
+        {
+            var ev = new LatheProduceCompleteEvent(uid, recipe);
+            RaiseLocalEvent(uid, ev);
         }
 
         public void UpdateUserInterfaceState(EntityUid uid, LatheComponent? component = null)

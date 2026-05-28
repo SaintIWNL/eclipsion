@@ -24,19 +24,31 @@
       entries:
       - id: ClothingOuterHardsuitNCWLInfantry
         name: скафандр ЛРНП
-        recommended: true    
+        recommended: true
       - id: ClothingOuterArmorNCWLHeavyCarapace
         name: бронежилет ЛРНП
+    - name: Основное оружие
+      choices: { CMWeapon: 1 }
+      entries:
+      - id: WeaponRifleFAL
+        name: НКВЛ МК-2 Фалин 5.56x45 мм
+        recommended: true
+      - id: WeaponShotgunProletar
+        name: НКВЛ Тоз-97 Пролетарий 12 кал
+      - id: WeaponSubMachineGunNCWLWatchdog
+        name: НКВЛ ДС1 Страж 9x19mm
     - name: Утилиты
       choices: { CMUtilities: 2 }
       entries:
+      - id: ExGrenade
+        name: разрывная граната
       - id: EmpGrenade
         name: ЭМИ Граната
       - id: BreachingCharge
         name: Прорывной заряд
       - id: HandHeldMassScannerEE
         name: портативный сканер масс
-        recommended: true   
+        recommended: true
     - name: Боеприпасы
       choices: { CMAmmo: 2 }
       entries:
@@ -73,19 +85,31 @@
       entries:
       - id: ClothingOuterHardsuitImperialSoldier
         name: скафандр БМС
-        recommended: true    
+        recommended: true
       - id: ClothingOuterArmorImperialTrooperArmor
         name: бронежилет БМС
+    - name: Основное оружие
+      choices: { CMWeapon: 1 }
+      entries:
+      - id: WeaponShotgunReno
+        name: БМС ДА-13 Рено 12 кал.
+      - id: WeaponRifleMiller
+        name: БМС ДА-8 Миллер 5.56x45 мм
+        recommended: true
+      - id: WeaponSubMachineGunBeetle
+        name: ХП Мак-11 Жук 9x19 мм
     - name: Утилиты
       choices: { CMUtilities: 2 }
       entries:
+      - id: ExGrenade
+        name: разрывная граната
       - id: EmpGrenade
         name: ЭМИ Граната
       - id: BreachingCharge
         name: Прорывной заряд
       - id: HandHeldMassScannerEE
         name: портативный сканер масс
-        recommended: true 
+        recommended: true
     - name: Боеприпасы
       choices: { CMAmmo: 2 }
       entries:
@@ -93,6 +117,68 @@
         name: 35-зарядный магазин для пистолета-пулемета (9x19 мм PSTF auto)
       - id: MagazineLightRifle
         name: 30-зарядный магазин (5,56x45 мм)
+      - id: MagazineShotgun
+        name: 10-зарядный магазин (12 калибр)
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechEquipmentInterdyne
+  name: автоматическая стойка снаряжения интердайна
+  description: Автоматизированный стеллаж, соединенный с колоссальным хранилищем стандартного снаряжения Interdyne Pharmaceuticals.
+  components:
+  - type: AccessReader
+    access:
+    - [ "SyndicateInterdyne" ]
+  - type: Sprite
+    sprite: _Crescent/Structures/syndicatearmory.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - TraumasecNCSP
+    - RipperdocNCSP
+    - CoordinatorNCSP
+    sections:
+    - name: Стандартный набор
+      choices: { CMClass: 1 }
+      entries:
+      - id: CMVendorBundleIPMApparel
+        name: стандартный набор
+        recommended: true
+    - name: Броня
+      choices: { CMArmour: 1 }
+      entries:
+      - id: ClothingOuterHardsuitTraumasec
+        name: скафандр Interdyne TraumaSec
+        recommended: true
+      - id: ClothingOuterArmorSyndicateArmorvestInterdyne
+        name: баллистический жилет TraumaSec
+    - name: Основное оружие
+      choices: { CMWeapon: 1 }
+      entries:
+      - id: WeaponRifleKrinkov
+        name: КВСТ АКС-74У Кринков 5.56x45 мм
+        recommended: true
+      - id: WeaponSubMachineGunAtreides
+        name: Атрейдес
+      - id: WeaponShotgunNCSPSaiga12
+        name: КВСТ Сайга-12к Молот 12 кал.
+    - name: EVA и утилиты
+      choices: { CMUtilities: 2 }
+      entries:
+      - id: HandHeldMassScannerEE
+        name: портативный сканер масс
+        recommended: true
+      - id: SHIHG7FlashbangHandgrenade
+        name: светошумовая граната ТПШ HG-07
+      - id: F1Handgrenade
+        name: Граната Ф-1
+    - name: Боеприпасы
+      choices: { CMAmmo: 2 }
+      entries:
+      - id: MagazineLightRifle
+        name: 30-зарядный магазин (5,56x45 мм)
+        recommended: true
+      - id: MagazinePistolSubMachineGun
+        name: 35-зарядный магазин для пистолета-пулемета (9x19 мм PSTF auto)
       - id: MagazineShotgun
         name: 10-зарядный магазин (12 калибр)
 
@@ -128,9 +214,19 @@
       entries:
       - id: ClothingOuterHardsuitMidshipman
         name: скафандр минитменов "Мичман"
-        recommended: true    
+        recommended: true
       - id: ClothingOuterArmorCMM
         name: кираса патрульного
+    - name: Основное оружие
+      choices: { CMWeapon: 1 }
+      entries:
+      - id: WeaponShotgunSHIDoubleBarreled4g
+        name: SHI M135 Двустволка 12g
+      - id: WeaponRifleCMMNimrod
+        name: КММ M32 Нимрод 7.62x51mm
+        recommended: true
+      - id: WeaponSubMachineGunMP5
+        name: НТ MP5 9x19mm
     - name: Дополнительное оружие
       choices: { CMPistol: 1 }
       entries:
@@ -142,13 +238,15 @@
     - name: Утилиты
       choices: { CMUtilities: 2 }
       entries:
+      - id: ExGrenade
+        name: разрывная граната
       - id: EmpGrenade
         name: ЭМИ Граната
       - id: BreachingCharge
         name: Прорывной заряд
       - id: HandHeldMassScannerEE
         name: портативный сканер масс
-        recommended: true 
+        recommended: true
     - name: Боеприпасы
       choices: { CMAmmo: 4 }
       entries:
@@ -196,9 +294,20 @@
       entries:
       - id: ClothingOuterHardsuitHighsec
         name: боевой скафандр "Шиногара" SVBT-2
-      - id: ClothingOuterHardsuitHighsecUA
-        name: боевой скафандр "Шиногара" SVBT-2-UA
-        recommended: true  
+        recommended: true
+      #- id: ClothingOuterHardsuitHighsecUA
+      #  name: боевой скафандр "Шиногара" SVBT-2-UA
+      #  recommended: true
+    - name: Основное оружие
+      choices: { CMWeapon: 1 }
+      entries:
+      - id: WeaponRifleLecter
+        name: ТПШ Лектер
+        recommended: true
+      - id: WeaponRifleHoundMarksman
+        name: ТПШ М215 "Хаунд" 5.56х45
+      - id: WeaponSubMachineGunMP49
+        name: ТПШ MP49 "Надзиратель" 9x19mm
     - name: Дополнительное оружие
       choices: { CMPistol: 1 }
       entries:
@@ -210,15 +319,17 @@
     - name: Утилиты
       choices: { CMUtilities: 3 }
       entries:
+      - id: ExGrenade
+        name: разрывная граната
       - id: EmpGrenade
         name: ЭМИ Граната
       - id: BreachingCharge
         name: Прорывной заряд
       - id: HandHeldMassScannerEE
         name: портативный сканер масс
-        recommended: true 
+        recommended: true
     - name: Боеприпасы
-      choices: { CMAmmo: 3 }
+      choices: { CMAmmo: 4 }
       entries:
       - id: MagazinePistolSubMachineGun
         name: 35-зарядный магазин для пистолета-пулемета (9x19 мм PSTF auto)
@@ -256,7 +367,7 @@
       entries:
       - id: ClothingOuterHardsuitSyndicateBG
         name: скафандр штурмовика BULWARK mk.II
-        recommended: true  
+        recommended: true
       - id: ClothingOuterHardsuitSyndicateSellsword
         name: модифицированный скафандр SELLSWORD mk.IIB
       - id: ClothingOuterHardsuitSyndicateFreiritter
@@ -282,7 +393,7 @@
         name: Прорывной заряд
       - id: HandHeldMassScannerEE
         name: портативный сканер масс
-        recommended: true 
+        recommended: true
     - name: Боеприпасы
       choices: { CMAmmo: 4 }
       entries:

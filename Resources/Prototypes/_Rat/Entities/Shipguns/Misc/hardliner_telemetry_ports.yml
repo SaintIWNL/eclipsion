@@ -1,0 +1,12 @@
+# Ratgore Start
+- type: sinkPort
+  id: HardlinerTelemetryIn
+  name: signal-port-name-hardliner-telemetry-in
+  description: signal-port-description-hardliner-telemetry-in
+
+- type: sourcePort
+  id: HardlinerTelemetryOut
+  name: signal-port-name-hardliner-telemetry-out
+  description: signal-port-description-hardliner-telemetry-out
+  defaultLinks: [ HardlinerTelemetryIn ]
+# Ratgore End

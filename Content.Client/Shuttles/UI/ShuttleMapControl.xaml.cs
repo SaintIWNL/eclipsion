@@ -17,6 +17,7 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Content.Client._Rat.SpaceEvents; // Rat
 
 namespace Content.Client.Shuttles.UI;
 
@@ -28,6 +29,8 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
     [Dependency] private readonly IMapManager _mapManager = default!;
     private readonly ShuttleSystem _shuttles;
     private readonly SharedTransformSystem _xformSystem;
+
+    private EmpZoneClientSystem _empZone = default!;
 
     protected override bool Draggable => true;
 
@@ -72,11 +75,12 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
     private readonly List<ShuttleExclusionObject> _viewportExclusions = new();
 
     //Changing from 256 512 512 to 256 2048 2048, this shows in testing to be about 4000 units ish. presume 1024>2048 units
-    public ShuttleMapControl() : base(384f, 3072f, 3072f)
+    public ShuttleMapControl() : base(640f, 5120f, 5120f)
     {
         RobustXamlLoader.Load(this);
         _shuttles = EntManager.System<ShuttleSystem>();
         _xformSystem = EntManager.System<SharedTransformSystem>();
+		_empZone = EntManager.System<EmpZoneClientSystem>();
         var cache = IoCManager.Resolve<IResourceCache>();
 
         _physicsQuery = EntManager.GetEntityQuery<PhysicsComponent>();
@@ -147,85 +151,103 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
         base.MouseWheel(args);
     }
 
-    private void DrawParallax(DrawingHandleScreen handle)
+    // Rat-start
+    private void DrawCoordinateGrid(DrawingHandleScreen handle)
     {
-        if (!EntManager.TryGetComponent(_shuttleEntity, out TransformComponent? shuttleXform) || shuttleXform.MapUid == null)
-            return;
+        DrawBacking(handle);
 
-        // TODO: Figure out how the fuck to make this common between the 3 slightly different parallax methods and move to parallaxsystem.
-        // Draw background texture
-        var tex = _shuttles.GetTexture(shuttleXform.MapUid.Value);
+        const float step = 500f;
+        var gridColor = new Color(0.2f, 0.2f, 0.2f, 0.8f);
+        var axisColor = new Color(0.4f, 0.4f, 0.4f, 1f);
 
-        // Size of the texture in world units.
-        var size = tex.Size * MinimapScale * 1f;
+        var startX = MathF.Floor((Offset.X - WorldRange) / step) * step;
+        var endX = MathF.Ceiling((Offset.X + WorldRange) / step) * step;
+        var startY = MathF.Floor((Offset.Y - WorldRange) / step) * step;
+        var endY = MathF.Ceiling((Offset.Y + WorldRange) / step) * step;
 
-        var position = ScalePosition(new Vector2(-Offset.X, Offset.Y));
-        var slowness = 1f;
+        var screenH = PixelHeight;
+        var screenW = PixelWidth;
 
-        // The "home" position is the effective origin of this layer.
-        // Parallax shifting is relative to the home, and shifts away from the home and towards the Eye centre.
-        // The effects of this are such that a slowness of 1 anchors the layer to the centre of the screen, while a slowness of 0 anchors the layer to the world.
-        // (For values 0.0 to 1.0 this is in effect a lerp, but it's deliberately unclamped.)
-        // The ParallaxAnchor adapts the parallax for station positioning and possibly map-specific tweaks.
-        var home = Vector2.Zero;
-        var scrolled = Vector2.Zero;
-
-        // Origin - start with the parallax shift itself.
-        var originBL = (position - home) * slowness + scrolled;
-
-        // Place at the home.
-        originBL += home;
-
-        // Centre the image.
-        originBL -= size / 2;
-
-        // Remove offset so we can floor.
-        var botLeft = new Vector2(0f, 0f);
-        var topRight = botLeft + PixelSize;
-
-        var flooredBL = botLeft - originBL;
-
-        // Floor to background size.
-        flooredBL = (flooredBL / size).Floored() * size;
-
-        // Re-offset.
-        flooredBL += originBL;
-
-        for (var x = flooredBL.X; x < topRight.X; x += size.X)
+        for (var wx = startX; wx <= endX; wx += step)
         {
-            for (var y = flooredBL.Y; y < topRight.Y; y += size.Y)
-            {
-                handle.DrawTextureRect(tex, new UIBox2(x, y, x + size.X, y + size.Y));
-            }
+            var sx = ScalePosition(new Vector2(wx - Offset.X, 0f)).X;
+            var color = MathF.Abs(wx) < 0.1f ? axisColor : gridColor;
+            handle.DrawLine(new Vector2(sx, 0), new Vector2(sx, screenH), color);
+        }
+
+        for (var wy = startY; wy <= endY; wy += step)
+        {
+            var sy = ScalePosition(new Vector2(0f, -(wy - Offset.Y))).Y;
+            var color = MathF.Abs(wy) < 0.1f ? axisColor : gridColor;
+            handle.DrawLine(new Vector2(0, sy), new Vector2(screenW, sy), color);
         }
     }
+    // Rat-end
 
     // Rat-start
+    private static void DrawFilledRing(DrawingHandleScreen handle, Vector2 center,
+        float innerRadius, float outerRadius, Color fillColor, Color outlineColor, int segments = 64)
+    {
+        var verts = new Vector2[segments * 6];
+        for (int i = 0; i < segments; i++)
+        {
+            float a0 = MathF.Tau * i / segments;
+            float a1 = MathF.Tau * (i + 1) / segments;
+            var d0 = new Vector2(MathF.Cos(a0), MathF.Sin(a0));
+            var d1 = new Vector2(MathF.Cos(a1), MathF.Sin(a1));
+            verts[i * 6 + 0] = center + d0 * innerRadius;
+            verts[i * 6 + 1] = center + d0 * outerRadius;
+            verts[i * 6 + 2] = center + d1 * outerRadius;
+            verts[i * 6 + 3] = center + d0 * innerRadius;
+            verts[i * 6 + 4] = center + d1 * outerRadius;
+            verts[i * 6 + 5] = center + d1 * innerRadius;
+        }
+        handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, verts, fillColor);
+
+        var outerVerts = new Vector2[segments];
+        var innerVerts = new Vector2[segments];
+        for (int i = 0; i < segments; i++)
+        {
+            float a = MathF.Tau * i / segments;
+            var dir = new Vector2(MathF.Cos(a), MathF.Sin(a));
+            outerVerts[i] = center + dir * outerRadius;
+            innerVerts[i] = center + dir * innerRadius;
+        }
+        handle.DrawPrimitives(DrawPrimitiveTopology.LineLoop, outerVerts, outlineColor);
+        handle.DrawPrimitives(DrawPrimitiveTopology.LineLoop, innerVerts, outlineColor);
+    }
+
     private void DrawRatZones(DrawingHandleScreen handle)
     {
-        if (ViewingMap == MapId.Nullspace)
-            return;
-
         var matty = Matrix3Helpers.CreateInverseTransform(Offset, Angle.Zero);
+        var worldOrigin = Vector2.Transform(Vector2.Zero, matty);
+        worldOrigin = worldOrigin with { Y = -worldOrigin.Y };
+        var screenOrigin = ScalePosition(worldOrigin);
 
-        // Центр мира (0,0) на текущей карте
-        var worldCenter = new MapCoordinates(Vector2.Zero, ViewingMap);
+        // Центр
+        handle.DrawCircle(screenOrigin, 500f * MinimapScale, new Color(1f, 0f, 0f, 0.03f));
+        handle.DrawCircle(screenOrigin, 500f * MinimapScale, new Color(1f, 0f, 0f, 0.2f), filled: false);
 
-        // Преобразуем центр мира в экранные координаты
-        var centerRelativePos = Vector2.Transform(worldCenter.Position, matty);
-        centerRelativePos = centerRelativePos with { Y = -centerRelativePos.Y };
-        var centerUiPos = ScalePosition(centerRelativePos);
+        // Внешнее кольцо
+        DrawFilledRing(handle, screenOrigin,
+            4000f * MinimapScale, 4500f * MinimapScale,
+            new Color(0f, 1f, 0f, 0.03f), new Color(0f, 1f, 0f, 0.2f));
 
-        // Рисуем красную зону (650 units)
-        var redZoneRadius = 650f * MinimapScale;
-        handle.DrawCircle(centerUiPos, redZoneRadius, new Color(255, 0, 0, 50), false);
+        // Хадал
+        DrawFilledRing(handle, screenOrigin,
+            10000f * MinimapScale, 20000f * MinimapScale,
+            new Color(1f, 0f, 0f, 0.01f), new Color(1f, 0f, 0f, 0.1f));
 
-        // Рисуем зелёные зоны (3950 и 4350 units)
-        var greenZoneRadius1 = 3950f * MinimapScale;
-        var greenZoneRadius2 = 4350f * MinimapScale;
+	    foreach (var (_, (center, radius)) in _empZone.ActiveZones)
+        {
+            var empRelPos = Vector2.Transform(center, matty);
+            empRelPos = empRelPos with { Y = -empRelPos.Y };
+            var empScreenPos = ScalePosition(empRelPos);
+            var empScreenRadius = radius * MinimapScale;
 
-        handle.DrawCircle(centerUiPos, greenZoneRadius1, new Color(0, 255, 0, 50), false);
-        handle.DrawCircle(centerUiPos, greenZoneRadius2, new Color(0, 255, 0, 50), false);
+            handle.DrawCircle(empScreenPos, empScreenRadius, new Color(0f, 0.8f, 1f, 0.03f));
+            handle.DrawCircle(empScreenPos, empScreenRadius, new Color(0f, 0.8f, 1f, 0.2f), filled: false);
+        }
     }
     // Rat-end
 
@@ -247,6 +269,10 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
                 continue;
 
             var mapCoords = _shuttles.GetMapCoordinates(mapObj);
+			// Rat-start
+			if (mapCoords == MapCoordinates.Nullspace)
+                continue;
+			// Rat-end
 
             var relativePos = Vector2.Transform(mapCoords.Position, matty);
             relativePos = relativePos with { Y = -relativePos.Y };
@@ -278,7 +304,7 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
             return;
         }
 
-        DrawParallax(handle);
+        DrawCoordinateGrid(handle); // Rat
 
         DrawRatZones(handle);
 

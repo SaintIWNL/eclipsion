@@ -78,7 +78,7 @@
     HardsuitElectronics: 500
     Silver: 750
     Durathread: 1500
-    NanotrasenElectronics: 1000
+    NanotrasenElectronics: 500
     Steel: 1500
 
 - type: latheRecipe

@@ -1,0 +1,53 @@
+# Ratgore Start
+- type: entity
+  parent: BaseComputerAiAccess
+  id: ComputerHardlinerFireControl
+  name: NT-9 3100c plasma lance telemetry console
+  description: Monitors nano-capacitor staging and Hardliner cell magazines for linked fixed assemblies over the shuttle wireless grid.
+  suffix: Ratgore
+  components:
+  - type: Sprite
+    layers:
+    - map: ["computerLayerBody"]
+      state: computer
+    - map: ["computerLayerKeyboard"]
+      state: generic_keyboard
+    - map: ["computerLayerScreen"]
+      state: shuttle
+    - map: ["computerLayerKeys"]
+      state: tech_key
+    - map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      state: generic_panel_open
+  - type: HardlinerFireControlConsole
+  - type: ActivatableUI
+    key: enum.HardlinerFireControlConsoleUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.HardlinerFireControlConsoleUiKey.Key:
+        type: HardlinerFireControlBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: Computer
+    board: HardlinerFireControlConsoleCircuitboard
+  - type: DeviceNetwork
+    deviceNetId: Wireless
+    receiveFrequencyId: BasicDevice
+    transmitFrequencyId: BasicDevice
+    prefix: device-address-prefix-console
+    examinableAddress: true
+  - type: WirelessNetworkConnection
+    range: 1200
+  - type: DeviceLinkSink
+    ports:
+      - HardlinerTelemetryIn
+  - type: DeviceList
+    isAllowList: true
+    handleIncomingPackets: true
+    deviceLimit: 8
+  - type: DeviceNetworkRequiresPower
+  - type: PointLight
+    radius: 1.6
+    energy: 1.55
+    color: "#34ffe9"
+# Ratgore End

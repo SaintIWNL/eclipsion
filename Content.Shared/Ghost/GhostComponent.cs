@@ -91,6 +91,12 @@ public sealed partial class GhostComponent : Component
 
     [DataField("canReturnToBody"), AutoNetworkedField]
     private bool _canReturnToBody;
+
+    [DataField, AutoNetworkedField]
+    public bool InsuranceRespawnAvailable;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan InsuranceRespawnAt = TimeSpan.Zero;
 }
 
 public sealed partial class ToggleFoVActionEvent : InstantActionEvent { }

@@ -1,13 +1,13 @@
-role-timer-department-insufficient = You require [color=yellow]{ TOSTRING($time, "0") }[/color] more minutes of [color={ $departmentColor }]{ $department }[/color] department playtime to play this role.
-role-timer-department-too-high = You require [color=yellow]{ TOSTRING($time, "0") }[/color] fewer minutes in [color={ $departmentColor }]{ $department }[/color] department to play this role. (Are you trying to play a trainee role?)
-role-timer-overall-insufficient = You require [color=yellow]{ TOSTRING($time, "0") }[/color] more minutes of playtime to play this role.
-role-timer-overall-too-high = You require [color=yellow]{ TOSTRING($time, "0") }[/color] fewer minutes of playtime to play this role. (Are you trying to play a trainee role?)
-role-timer-role-insufficient = You require [color=yellow]{ TOSTRING($time, "0") }[/color] more minutes with [color={ $departmentColor }]{ $job }[/color] to play this role.
-role-timer-role-too-high = You require[color=yellow] { TOSTRING($time, "0") }[/color] fewer minutes with [color={ $departmentColor }]{ $job }[/color] to play this role. (Are you trying to play a trainee role?)
+role-timer-department-insufficient = Вам нужно на [color=yellow]{ TOSTRING($time, "0") }[/color] минут больше за фракцию "[color={ $departmentColor }]{ $department }[/color]" чтобы играть за эту роль.
+role-timer-department-too-high = Вам нужно на [color=yellow]{ TOSTRING($time, "0") }[/color] меньше минут за фракцию "[color={ $departmentColor }]{ $department }[/color]" чтобы играть за эту роль. Нравится чувствовать превосходство?
+role-timer-overall-insufficient = Вам нужно на [color=yellow]{ TOSTRING($time, "0") }[/color] минут больше игрового времени чтобы открыть эту роль.
+role-timer-overall-too-high = Вам нужно на [color=yellow]{ TOSTRING($time, "0") }[/color] минут меньше игрового времени чтобы вновь открыть эту роль. Нравится чувствовать превосходство?
+role-timer-role-insufficient = Вам нужно на [color=yellow]{ TOSTRING($time, "0") }[/color] минут больше за должность "[color={ $departmentColor }]{ $job }[/color]" чтобы играть за эту роль.
+role-timer-role-too-high = Вам нужно на [color=yellow] { TOSTRING($time, "0") }[/color] минут меньше за должность "[color={ $departmentColor }]{ $job }[/color]" чтобы играть за эту роль. Нравится чувствовать превосходство?
 role-timer-age-to-old = Для игры на этой роли вашему персонажу должно быть меньше [color=yellow]{ $age }[/color] лет.
 role-timer-age-to-young = Для игры на этой роли вашему персонажу должно быть больше [color=yellow]{ $age }[/color] лет.
 role-timer-whitelisted-species = Для игры на этой роли ваш персонаж должен быть одной из следующих рас:
 role-timer-blacklisted-species = Для игры на этой роли ваш персонаж не должен быть одной из следующих рас:
-role-timer-locked = Locked (hover for details)
-role-timer-department-unknown = Unknown Department
-role-ban = You have been banned from this role.
+role-timer-locked = Закрыто (наведитесь для подробностей)
+role-timer-department-unknown = Неизвестно.
+role-ban = Вы заблокированы с этой роли.

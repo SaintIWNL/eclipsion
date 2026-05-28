@@ -9,8 +9,9 @@ public sealed partial class ProximityFuseComponent : Component
     [DataField]
     public float Safety = 0.5f;
 
+    public float NextDiscoveryScan;
     [DataField]
-    public List<Target> Targets = new();
+    public Dictionary<EntityUid, float> Targets = new();
 }
 
 public class Target

@@ -7,8 +7,8 @@ job-name-utility-ipc = NT Engineer IPC
 
 job-name-ncwl-faction-leader = Генерал
 job-name-ncwl-kommissar = Комиссар
-job-name-ncwl-mvd-officer = Курсант комиссариата
-job-name-ncwl-mvd-grunt = Сотрудник МВД
+job-name-ncwl-mvd-officer = Офицер МБД
+job-name-ncwl-mvd-grunt = Сотрудник МБД
 job-name-ncwl-fleetkapitan = Офицер Флота
 job-name-ncwl-partisan = Гвардеец
 job-name-ncwl-industry-taskmaster = Старший инженер

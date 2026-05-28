@@ -48,6 +48,8 @@
     boardName: wires-board-name-vendingmachine
     layoutId: Vending
   - type: Anchorable
+    flags:
+    - None
   - type: Electrified
     enabled: false
     usesApcPower: true
@@ -152,6 +154,9 @@
   name: imperial cargo turn-in chute
   description: A machine with piping systems that lead into the bowels of the ship, accepting export goods for trade deeds.
   components:
+  - type: Anchorable
+    flags:
+    - None
   - type: Dispenser
     defaultItem: TradeDeedStub
     dynamicInventory:
@@ -197,6 +202,9 @@
   name: Freeporter cargo turn-in chute
   description: A machine with piping systems that lead into the bowels of the ship, accepting export goods.
   components:
+  - type: Anchorable
+    flags:
+    - None
   - type: Dispenser
     defaultItem: TradeDeedStub
     dynamicInventory:
@@ -240,6 +248,9 @@
   name: Newport cargo turn-in chute
   description: A machine with piping systems that lead into the bowels of the ship, accepting export goods for trade deeds.
   components:
+  - type: Anchorable
+    flags:
+    - None
   - type: Dispenser
     defaultItem: TradeDeedStub
     dynamicInventory:
@@ -740,6 +751,10 @@
   name: interdyne exotic bioprocessor
   description: A machine that mulches scrap muscle and protein into usable exotic particles.
   components:
+  - type: DispenserRejectedComponents
+    rejectedComponents:
+    - CloneOrgan
+    denyPopup: bioprocessor-interdyne-clone-organ-denied
   - type: Anchorable
     flags:
     - None

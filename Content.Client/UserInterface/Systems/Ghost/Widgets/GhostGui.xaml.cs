@@ -17,6 +17,7 @@ public sealed partial class GhostGui : UIWidget
     public event Action? ReturnToBodyPressed;
     public event Action? GhostRolesPressed;
     public event Action? ReturnToRoundPressed;
+    public event Action? InsuranceRespawnPressed;
 
     public GhostGui()
     {
@@ -32,6 +33,7 @@ public sealed partial class GhostGui : UIWidget
         ReturnToBodyButton.OnPressed += _ => ReturnToBodyPressed?.Invoke();
         GhostRolesButton.OnPressed += _ => GhostRolesPressed?.Invoke();
         ReturnToRound.OnPressed += _ => ReturnToRoundPressed?.Invoke();
+        InsuranceRespawnButton.OnPressed += _ => InsuranceRespawnPressed?.Invoke();
     }
 
     public void Hide()
@@ -59,6 +61,32 @@ public sealed partial class GhostGui : UIWidget
         }
 
         TargetWindow.Populate();
+    }
+
+    public void UpdateInsuranceRespawn(bool available, TimeSpan timeLeft, bool spawnMachineBound = true, bool spawnMachinePowered = true)
+    {
+        InsuranceRespawnButton.Visible = available;
+        if (!available)
+            return;
+
+        var timerReady = timeLeft <= TimeSpan.Zero;
+        var ready = timerReady && spawnMachineBound && spawnMachinePowered;
+        InsuranceRespawnButton.Disabled = !ready;
+        if (timerReady && !spawnMachineBound)
+        {
+            InsuranceRespawnButton.Text = Loc.GetString("ghost-gui-insurance-respawn-no-machine");
+            return;
+        }
+
+        if (timerReady && spawnMachineBound && !spawnMachinePowered)
+        {
+            InsuranceRespawnButton.Text = Loc.GetString("ghost-gui-insurance-respawn-no-power");
+            return;
+        }
+
+        InsuranceRespawnButton.Text = timerReady
+            ? Loc.GetString("ghost-gui-insurance-respawn-ready")
+            : Loc.GetString("ghost-gui-insurance-respawn-timer", ("time", $"{timeLeft.Minutes:D2}:{timeLeft.Seconds:D2}"));
     }
 
     protected override void Dispose(bool disposing)

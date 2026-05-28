@@ -26,9 +26,10 @@ public sealed class SponsorData
 
     public static readonly Dictionary<SponsorLevel, string> SponsorGhost = new()
     {
-        { SponsorLevel.Level3, "MobObserver" },
-        { SponsorLevel.Level4, "MobObserver" },
-        { SponsorLevel.Level5, "MobObserver" }
+        { SponsorLevel.Level2, "MobObserverLevel1" },
+		{ SponsorLevel.Level3, "MobObserverLevel2" },
+        { SponsorLevel.Level4, "MobObserverLevel3" },
+        { SponsorLevel.Level5, "MobObserverLevel4" }
     };
 
     public static SponsorLevel ParseRoles(List<string> roles)

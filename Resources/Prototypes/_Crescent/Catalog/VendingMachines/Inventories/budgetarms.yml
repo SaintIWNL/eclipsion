@@ -1,12 +1,12 @@
 - type: vendingMachineInventory
   id: SHIBudgetArmoryInventory
   startingInventory:
-    WeaponPistolBlastpopRed: 3
-    WeaponPistolBlastpopPurple: 3
-    WeaponPistolBlastpopGray: 3
-    WeaponPistolBlastpopGreen: 3
-    WeaponPistolBlastpopGold: 3
-    WeaponPistolBlastpopBlue: 3
+    WeaponPistolBlastpopRed: 6
+    WeaponPistolBlastpopPurple: 6
+    WeaponPistolBlastpopGray: 6
+    WeaponPistolBlastpopGreen: 6
+    WeaponPistolBlastpopGold: 6
+    WeaponPistolBlastpopBlue: 6
     WeaponPistolMk58: 6
     MagazinePistol6mm: 12
     WeaponSubMachineGunSabre: 4

@@ -543,6 +543,17 @@
   - type: SpaceArtillery
     isPowerRequiredToFire: true
     powerUseActive: 1500
+  # Ratgore Start
+  - type: HardlinerArmamentTelemetry
+  - type: DeviceLinkSource
+    ports:
+      - SpaceArtilleryDetectedFiring
+      - SpaceArtilleryDetectedMalfunction
+      - SpaceArtilleryDetectedSafetyChange
+      - HardlinerTelemetryOut
+  - type: DeviceNetwork
+    transmitFrequencyId: BasicDevice
+  # Ratgore End
   - type: MagazineAmmoProvider
   - type: Construction
     graph: Machine

@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
+using Content.Shared._Crescent.SpaceArtillery;
 using Content.Shared._Shitmed.Targeting;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Camera;
@@ -328,6 +329,29 @@ public abstract partial class SharedProjectileSystem : EntitySystem
 
         if (component.IgnoreWeaponGrid && component.Weapon != null && !TerminatingOrDeleted(component.Weapon) && Transform(args.OtherEntity).GridUid == Transform((EntityUid) component.Weapon).GridUid)
             args.Cancelled = true;
+
+        // Ship weapon projectiles fired from the same shuttle should never collide with each other.
+        if (HasComp<ShipWeaponProjectileComponent>(uid)
+            && HasComp<ShipWeaponProjectileComponent>(args.OtherEntity)
+            && TryComp<ProjectileComponent>(args.OtherEntity, out var otherProjectile))
+        {
+            var ourGrid = GetProjectileSourceGrid(component);
+            var otherGrid = GetProjectileSourceGrid(otherProjectile);
+
+            if (ourGrid != null && ourGrid == otherGrid)
+                args.Cancelled = true;
+        }
+    }
+
+    private EntityUid? GetProjectileSourceGrid(ProjectileComponent projectile)
+    {
+        if (projectile.Weapon is { } weapon && !TerminatingOrDeleted(weapon))
+            return Transform(weapon).GridUid;
+
+        if (projectile.Shooter is { } shooter && !TerminatingOrDeleted(shooter))
+            return Transform(shooter).GridUid;
+
+        return null;
     }
 
     public void SetShooter(EntityUid id, ProjectileComponent component, EntityUid? shooterId)

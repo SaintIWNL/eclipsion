@@ -1,8 +1,10 @@
-﻿using Content.Client.Gameplay;
+using Content.Client.Gameplay;
 using Content.Client.Ghost;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Client.UserInterface.Systems.Ghost.Widgets;
 using Content.Shared.Ghost;
+using Robust.Client.GameObjects;
+using Robust.Shared.Timing;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 
@@ -12,6 +14,7 @@ namespace Content.Client.UserInterface.Systems.Ghost;
 public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSystem>
 {
     [Dependency] private readonly IEntityNetworkManager _net = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     [UISystemDependency] private readonly GhostSystem? _system = default;
 
     private GhostGui? Gui => UIManager.GetActiveUIWidgetOrNull<GhostGui>();
@@ -65,6 +68,7 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
 
         Gui.Visible = _system?.IsGhost ?? false;
         Gui.Update(_system?.AvailableGhostRoleCount, _system?.Player?.CanReturnToBody);
+        UpdateInsuranceButton();
     }
 
     private void OnPlayerRemoved(GhostComponent component)
@@ -129,6 +133,7 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
         Gui.TargetWindow.WarpClicked += OnWarpClicked;
         Gui.TargetWindow.OnGhostnadoClicked += OnGhostnadoClicked;
         Gui.ReturnToRoundPressed += ReturnToRound;
+        Gui.InsuranceRespawnPressed += InsuranceRespawn;
 
         UpdateGui();
     }
@@ -143,6 +148,7 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
         Gui.GhostRolesPressed -= GhostRolesPressed;
         Gui.TargetWindow.WarpClicked -= OnWarpClicked;
         Gui.ReturnToRoundPressed -= ReturnToRound;
+        Gui.InsuranceRespawnPressed -= InsuranceRespawn;
 
         Gui.Hide();
     }
@@ -155,6 +161,11 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
     private void ReturnToRound()
     {
         _system?.ReturnToRound();
+    }
+
+    private void InsuranceRespawn()
+    {
+        _system?.UseInsuranceRespawn();
     }
 
     private void RequestWarps()
@@ -177,5 +188,27 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
     private void GhostBarSpawnPressed() // Goobstation - Ghost Bar
     {
         _system?.GhostBarSpawn();
+    }
+
+    public override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+        UpdateInsuranceButton();
+    }
+
+    private void UpdateInsuranceButton()
+    {
+        if (Gui == null)
+            return;
+
+        var player = _system?.Player;
+        if (player == null || _system == null || !_system.InsuranceRespawnAvailable)
+        {
+            Gui.UpdateInsuranceRespawn(false, TimeSpan.Zero);
+            return;
+        }
+
+        var left = _system.InsuranceRespawnAt - _timing.CurTime;
+        Gui.UpdateInsuranceRespawn(true, left, _system.InsuranceSpawnMachineBound, _system.InsuranceSpawnMachinePowered);
     }
 }

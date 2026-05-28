@@ -21,3 +21,7 @@
     state: cpu_supply
   - type: ComputerBoard
     prototype: C_ComputerShuttle
+
+# Ratgore Start
+# HardlinerFireControlConsoleCircuitboard → Resources/Prototypes/_Rat/Entities/Objects/Devices/Circuitboards/hardliner_fire_control_console.yml
+# Ratgore End

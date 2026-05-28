@@ -1,34 +1,28 @@
-using System.Collections.Frozen;
-using System.Linq;
-using System.Runtime.Remoting;
 using Content.Shared._Crescent.PvsAutoOverride;
-using Content.Shared.Players;
 using Robust.Server.GameObjects;
 using Robust.Server.GameStates;
-using Robust.Shared.Map;
 using Robust.Shared.Player;
-
 
 namespace Content.Server._Crescent.HullrotPvsAutoOverride;
 
-
-/// <summary>
-/// This handles...
-/// </summary>
 public sealed class RangeBasedPvsSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    private const float ReconcileInterval = 0.2f;
+
     [Dependency] private readonly ISharedPlayerManager _players = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly PvsOverrideSystem _override = default!;
-    private float accumulator = 0f;
 
-    /// <inheritdoc/>
+    private float _accumulator;
+
+    private readonly HashSet<(EntityUid Entity, ICommonSession Session)> _validPlayersScratch = new();
+
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<RangeBasedPvsComponent, ComponentRemove>(OnFree);
     }
+
     public void OnFree(Entity<RangeBasedPvsComponent> obj, ref ComponentRemove args)
     {
         foreach (var session in obj.Comp.SendingSessions)
@@ -41,36 +35,49 @@ public sealed class RangeBasedPvsSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        _accumulator += frameTime;
+        if (_accumulator < ReconcileInterval)
+            return;
+
+        _accumulator -= ReconcileInterval;
+
         var playerData = _players.GetAllPlayerData();
-        var enumerator = EntityManager.EntityQueryEnumerator<RangeBasedPvsComponent>();
-        HashSet<(EntityUid, ICommonSession)> validPlayers = new();
+        _validPlayersScratch.Clear();
+
         foreach (var player in playerData)
         {
             if (!_players.TryGetSessionById(player.UserId, out var session))
                 continue;
-            if(session.AttachedEntity is not null)
-                validPlayers.Add((session.AttachedEntity.Value, session));
+
+            if (session.AttachedEntity is { } attached)
+                _validPlayersScratch.Add((attached, session));
         }
+
+        var enumerator = EntityManager.EntityQueryEnumerator<RangeBasedPvsComponent>();
 
         while (enumerator.MoveNext(out var uid, out var comp))
         {
-            foreach (var (player, session) in validPlayers)
+            var pvsPos = _transform.GetWorldPosition(uid);
+            var rangeSq = comp.PvsSendRange * comp.PvsSendRange;
+
+            foreach (var (player, session) in _validPlayersScratch)
             {
-                if ((_transform.GetWorldPosition(uid) - _transform.GetWorldPosition(player)).Length() > comp.PvsSendRange)
+                var delta = pvsPos - _transform.GetWorldPosition(player);
+                if (delta.LengthSquared() > rangeSq)
                 {
                     if (comp.SendingSessions.Remove(session))
-                    {
                         _override.RemoveSessionOverride(uid, session);
-                    }
+
                     continue;
                 }
 
                 if (comp.SendingSessions.Contains(session))
                     continue;
+
                 comp.SendingSessions.Add(session);
                 _override.AddSessionOverride(uid, session);
             }
         }
     }
 }
-

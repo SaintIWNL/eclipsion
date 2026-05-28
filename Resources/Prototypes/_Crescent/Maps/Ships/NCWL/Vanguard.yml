@@ -5,7 +5,7 @@
   id: Vanguard
   name: ЛРНП Авангард
   description: Коммунарский штурмовик, используется преимущественно как эскортное судно.
-  price: 35000
+  price: 38000
   category: Small
   group: None
   path: /Maps/_Crescent/Shuttles/NCWL/vanguard.yml

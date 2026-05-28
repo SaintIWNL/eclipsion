@@ -6,7 +6,7 @@
   components:
   - type: StorageFill
     contents:
-      - id: GalineCanister5
+      - id: GalineCanister #RatChange
         amount: 3
 
 - type: entity
@@ -17,7 +17,7 @@
   components:
   - type: StorageFill
     contents:
-      - id: PlasmaIsotope5
+      - id: PlasmaIsotope #RatChange
         amount: 3
 
 - type: entity
@@ -28,7 +28,7 @@
   components:
   - type: StorageFill
     contents:
-      - id: DeactivatedPhoronBottle5
+      - id: DeactivatedPhoronBottle #RatChange
         amount: 3
 
 - type: entity
@@ -39,7 +39,7 @@
   components:
   - type: StorageFill
     contents:
-      - id: MechaniteCanister5
+      - id: MechaniteCanister #RatChange
         amount: 3
 
 # vitals tracking implanters

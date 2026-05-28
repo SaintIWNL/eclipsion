@@ -6,5 +6,6 @@
         <Button Name="GhostWarpButton" Text="{Loc ghost-gui-ghost-warp-button}" />
         <Button Name="GhostRolesButton" />
         <Button Name="ReturnToRound" Text="{Loc ghost-gui-return-to-round-button}" />
+        <Button Name="InsuranceRespawnButton" Visible="False" />
     </BoxContainer>
 </widgets:GhostGui>

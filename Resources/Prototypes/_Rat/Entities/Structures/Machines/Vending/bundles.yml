@@ -51,7 +51,6 @@
     - DoubleEmergencyOxygenTankFilled
     - JetpackBlackFilled
     - ClothingShoesBootsMagCombat
-    - Stunbaton
 
 - type: entity
   id: CMVendorBundleCorpSecApparel
@@ -70,7 +69,6 @@
     - DoubleEmergencyOxygenTankFilled
     - JetpackBlackFilled
     - ClothingShoesBootsMagCombat
-    - Stunbaton
 
 - type: entity
   id: CMVendorBundleGSCApparel
@@ -89,3 +87,22 @@
     - DoubleEmergencyOxygenTankFilled
     - JetpackBlackFilled
     - ClothingShoesBootsMagSyndie
+
+- type: entity
+  id: CMVendorBundleIPMApparel
+  name: базовое снаряжение оперативника Интердайн
+  description: базовое снаряжение агентов Интердайн. Включает в себя ГПС, джетпак, магнитные сапоги и остальное.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite:  _Crescent/Structures/syndicatearmory.rsi
+    state: "off"
+  - type: CMVendorBundle
+    bundle:
+    - ClothingHandsGlovesCombat
+    - ClothingMaskSyndicateFacemask
+    - HandheldGPSBasic
+    - DoubleEmergencyOxygenTankFilled
+    - JetpackBlackFilled
+    - ClothingShoesBootsMagAdv
+    - VitalsTrackingImplanterInterdyne

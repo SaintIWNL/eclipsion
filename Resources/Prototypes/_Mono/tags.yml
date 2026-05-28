@@ -3,3 +3,7 @@
 # makes shuttle AI not target this grid
 - type: Tag
   id: ShuttleAIIgnore
+
+# Ship repair
+- type: Tag
+  id: ShipRepairTool

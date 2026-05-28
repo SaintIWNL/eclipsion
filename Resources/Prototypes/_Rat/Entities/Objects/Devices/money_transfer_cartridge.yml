@@ -1,0 +1,17 @@
+- type: entity
+  parent: BaseItem
+  id: MoneyTransferCartridge
+  name: money transfer cartridge
+  description: Secure bank transfers from your PDA.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/cartridge.rsi
+    state: cart-y
+  - type: UIFragment
+    ui: !type:MoneyTransferUi
+  - type: Cartridge
+    programName: money-transfer-program-name
+    icon:
+      sprite: Objects/Economy/cash.rsi
+      state: cash_1000
+  - type: MoneyTransferCartridge

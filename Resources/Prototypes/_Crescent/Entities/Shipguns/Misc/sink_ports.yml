@@ -17,3 +17,7 @@
   id: SpaceArtilleryOffSafety
   name: signal-port-name-space-artillery-off-safety
   description: signal-port-description-space-artillery-off-safety
+
+# Ratgore Start
+# HardlinerTelemetryIn → Resources/Prototypes/_Rat/Entities/Shipguns/Misc/hardliner_telemetry_ports.yml
+# Ratgore End

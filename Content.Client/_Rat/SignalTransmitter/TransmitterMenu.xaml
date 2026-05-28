@@ -1,0 +1,20 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    Title="{Loc transmitter-ui-title}" MinSize="240 220" SetSize="240 220">
+    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+        <PanelContainer Margin="0 0 0 5">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#1c0000" />
+            </PanelContainer.PanelOverride>
+            <Label Name="StatusLabel"/>
+        </PanelContainer>
+        <PanelContainer Margin="0 0 0 5">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#1c0000" />
+            </PanelContainer.PanelOverride>
+            <Label Name="CodeLabel"/>
+        </PanelContainer>
+        <GridContainer Columns="3" Name="KeypadGrid">
+        </GridContainer>
+    </BoxContainer>
+</DefaultWindow>

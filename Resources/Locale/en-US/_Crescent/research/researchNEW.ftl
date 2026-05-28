@@ -180,6 +180,7 @@ research-technology-shinohara-shiverblade = SHI-RIP9 Shiver Blade
 research-technology-shinohara-advance-armor = Svbt Experimental Armors
 research-technology-shinohara-civilian-ships = SHI Civilian Ships
 research-technology-shinohara-corpsec-ships = Corporate Security Ships
+research-technology-shinohara-corpsec-shark = Corporate Heavy Destroyer
 research-technology-shinohara-light-destroyer = SHI Battlecruisers
 research-technology-shinohara-stealth-pod = SHI Stealth Pods
 research-technology-shinohara-oldntballistics = Old NT Gun Schematics

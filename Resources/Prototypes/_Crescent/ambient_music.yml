@@ -57,7 +57,7 @@
 ## FACTION COMBAT MUSIC TRACKS
 ## ID MUST BE "combatmode<FACTION>"!
 
-# NCWL | STATE: good but not "communist" at all
+# NCWL | STATE: I think it's a good idea to give them some post-punk from Crisis: Third Way.
 - type: ambientMusic
   id: combatmodeNCWL
   priority: 3
@@ -67,8 +67,8 @@
 - type: soundCollection
   id: combatmodeNCWL
   files:
-    - /Audio/_Crescent/Ambience/CombatMode/NCWL_1.ogg
-    - /Audio/_Crescent/Ambience/CombatMode/NCWL_2.ogg
+    - /Audio/_Crescent/Ambience/CombatMode/NCWL_3.ogg
+    - /Audio/_Crescent/Ambience/CombatMode/NCWL_4.ogg
 
 
 ### TFSC (Balkanized) | STATE: redone by Baldy, needs custom tracks for each subfaction - leaving GSC with their Brigador OST
@@ -99,7 +99,7 @@
     - /Audio/_Crescent/Ambience/CombatMode/SAW_1.ogg
     - /Audio/_Crescent/Ambience/CombatMode/SAW_2.ogg
 
-#IPM | STATE: Left with default TFSC track, needs replacement
+#IPM | STATE: Incredible. Has Trepang2 music.
 - type: ambientMusic
   id: combatmodeIPM
   priority: 3
@@ -154,7 +154,7 @@
     - /Audio/_Crescent/Ambience/CombatMode/SHI_3.ogg
     - /Audio/_Crescent/Ambience/CombatMode/SHI_4.ogg
 
-# TAP | STATE: not happy with em
+# TAP | STATE: pretty good.
 - type: ambientMusic
   id: combatmodeTAP
   priority: 3
@@ -163,9 +163,11 @@
 
 - type: soundCollection
   id: combatmodeTAP
-  files:
-    - /Audio/_Crescent/Ambience/CombatMode/TAP_1.ogg
-    - /Audio/_Crescent/Ambience/CombatMode/TAP_2.ogg
+  files: # Rat-Change
+    - /Audio/_Crescent/Ambience/CombatMode/TAP_3.ogg
+    - /Audio/_Crescent/Ambience/CombatMode/TAP_4.ogg
+    - /Audio/_Crescent/Ambience/CombatMode/TAP_5.ogg
+    - /Audio/_Crescent/Ambience/CombatMode/TAP_6.ogg
 
 #Spacers/Independent | STATE: .2 approved
 - type: ambientMusic

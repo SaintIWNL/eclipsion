@@ -300,4 +300,21 @@ public abstract class SharedResearchSystem : EntitySystem
         var ev = new TechnologyDatabaseModifiedEvent();
         RaiseLocalEvent(uid, ref ev);
     }
+
+    /// <summary>
+    /// Removes a lathe recipe from the specified technology database.
+    /// </summary>
+    public void RemoveLatheRecipe(EntityUid uid, string recipe, TechnologyDatabaseComponent? component = null)
+    {
+        if (!Resolve(uid, ref component))
+            return;
+
+        if (!component.UnlockedRecipes.Remove(recipe))
+            return;
+
+        Dirty(uid, component);
+
+        var ev = new TechnologyDatabaseModifiedEvent();
+        RaiseLocalEvent(uid, ref ev);
+    }
 }

@@ -64,8 +64,8 @@ public sealed partial class DiscordAuthManager : IPostInjectInit
     }
     private void OnAuthSkip(MsgDiscordAuthSkip msg)
     {
-        var session = _playerMgr.GetSessionById(msg.MsgChannel.UserId);
-        PlayerVerified?.Invoke(this, session);
+        // var session = _playerMgr.GetSessionById(msg.MsgChannel.UserId);
+        // PlayerVerified?.Invoke(this, session);
     }
 
     private async void OnAuthCheck(MsgDiscordAuthCheck msg)

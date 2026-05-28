@@ -1,4 +1,5 @@
 using Content.Server.Cloning.Components;
+using System.Linq;
 using Content.Shared.Atmos;
 using Content.Shared.CCVar;
 using Content.Shared.Chemistry.Components;
@@ -11,7 +12,9 @@ using Content.Shared.Mind.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Random;
 using Content.Shared.Speech;
+using Content.Shared.Players;
 using Content.Shared.Preferences;
+using Content.Shared.Roles;
 using Content.Shared.Emoting;
 using Content.Server.Speech.Components;
 using Content.Server.StationEvents.Components;
@@ -26,6 +29,7 @@ using Content.Shared.Abilities.Psionics;
 using Content.Shared.Language.Components;
 using Content.Shared.Nutrition.Components;
 using Robust.Shared.Enums;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.Cloning;
 
@@ -359,5 +363,46 @@ public sealed partial class CloningSystem
         DamageSpecifier damage = new();
         damage.DamageDict.Add("Cellular", 0 + geneticDamage);
         _damageable.TryChangeDamage(mob, damage, true);
+    }
+
+    /// <summary>
+    ///     Applies trait components the same way as round-start player spawn (TraitSystem.ApplyTraits),
+    ///     using the cloned body's saved preferences while validating against the clone's species and the mind's job.
+    /// </summary>
+    private void ApplyTraitsToClone(EntityUid mob, HumanoidAppearanceComponent sourceHumanoid, EntityUid mindId)
+    {
+        if (sourceHumanoid.LastProfileLoaded == null
+            || !TryComp<HumanoidAppearanceComponent>(mob, out var cloneHumanoid)
+            || cloneHumanoid.LastProfileLoaded is not { } baseProfile)
+        {
+            return;
+        }
+
+        var sourceTraits = sourceHumanoid.LastProfileLoaded.TraitPreferences;
+        var traitProfile = baseProfile;
+        foreach (var traitId in baseProfile.TraitPreferences.ToArray())
+            traitProfile = traitProfile.WithTraitPreference(traitId, false);
+
+        foreach (var traitId in sourceTraits)
+            traitProfile = traitProfile.WithTraitPreference(traitId, true);
+
+        ProtoId<JobPrototype>? jobId = null;
+        if (_jobs.MindTryGetJob(mindId, out var jobPrototype))
+            jobId = jobPrototype.ID;
+
+        var playTimes = new Dictionary<string, TimeSpan>();
+        var whitelisted = false;
+        if (TryComp<MindComponent>(mindId, out var mind)
+            && mind.UserId is { } userId
+            && _playerManager.TryGetSessionById(userId, out var session))
+        {
+            playTimes = _playTimeTracking.GetTrackerTimes(session);
+            whitelisted = session.ContentData()?.Whitelisted ?? false;
+        }
+
+        _traitSystem.ApplyTraits(mob, jobId, traitProfile, playTimes, whitelisted);
+
+        cloneHumanoid.LastProfileLoaded = traitProfile;
+        Dirty(mob, cloneHumanoid);
     }
 }

@@ -73,7 +73,7 @@
 - type: entity
   parent: [BaseWeaponShotgun, BaseGunWieldable]
   id: WeaponShotgunBulldog
-  name: PTA MOD-2 Pozhar 12g  
+  name: PTA MOD-2 Pozhar 12g
   description: A tube-fed, fully automatic, combat shotgun designed for close quarters combat. Loads shells one by one. Uses 12 gauge shotgun shells.
   components:
   - type: Sprite
@@ -294,7 +294,7 @@
     fireRate: 4
     fireOnDropChance: 0.5
     shotgunSpreadMultiplier: 3
-    damageModifier: 1.5
+    damageModifier: 1.3
   - type: BallisticAmmoProvider
     capacity: 2
   - type: Construction

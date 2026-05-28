@@ -288,6 +288,9 @@
       - BoxLethalshot4g
       - BoxBeanbag4g
       - BoxLethalshot
+      - MagazinePistolCaselessRifle
+      - MagazineCaselessRifleShort
+      - MagazineCaselessRifle
       - BoxShotgunLumen
       - BoxShotgunFlare
       - MagazineBoxMagnum
@@ -813,6 +816,8 @@
       - KhanLPC
       - PerigaleLPC
       - RaiderLPC
+      - ValorDroneLPC
+      - RocinanteDroneLPC
       # DSM end
       # NCWL start
       - ClothingHeadHelmetNCWLEVA
@@ -859,6 +864,8 @@
       - SternLPC
       - BogatyrLPC
       - SunderLPC
+      - HornetDroneLPC
+      - WaspDroneLPC
       - WeaponSubMachineGunBloodhound
       - WeaponSubMachineGunMilitant
       - WeaponRifleNCWLBatanya
@@ -977,7 +984,7 @@
       - SHIKatana
       - SHIShiverBlade
       - ClothingOuterHardsuitSHIJuggernaut
-      - ClothingOuterHardsuitSHISpeedsuit
+      #- ClothingOuterHardsuitSHISpeedsuit # It has to go. SHI should not have Literally Every Category Of Suit In The Game For Free just because they're a mega-corporation.
       - GazpachovLPC
       - BuffaloLPC
       - ChanchuLPC
@@ -985,6 +992,7 @@
       - MusinyaneLPC
       - FleaLPC
       - FujinLPC
+      - SharkLPC
       - MetempsychoticMachineCircuitboard
       - HardlinerFlatpack
       - PowerCageHardliner
@@ -1646,9 +1654,10 @@
       - FlatpackComputerDroneControl
       - FlatpackDroneController
       - ThrusterHighImpulseTAP
-      - ClothingOuterHardsuitCybersunDreadnoughtCyberdawn
+    #  - ClothingOuterHardsuitCybersunDreadnoughtCyberdawn #Has to go since Egui is working now.
   - type: MaterialStorageMagnetPickup
     magnetEnabled: True
+    range: 0.3
 
   - type: Machine
     board: MicroforgeCircuitboard
@@ -1720,6 +1729,9 @@
   - type: Anchorable
     flags:
     - Anchorable
+  - type: MaterialStorageMagnetPickup
+    magnetEnabled: False
+    range: 0.3
 
 #organs
 

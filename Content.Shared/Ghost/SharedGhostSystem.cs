@@ -59,6 +59,16 @@ namespace Content.Shared.Ghost
         {
             component.CanReturnToBody = value;
         }
+
+    public void SetInsuranceRespawnData(EntityUid uid, bool available, TimeSpan respawnAt, GhostComponent? component = null)
+    {
+        if (!Resolve(uid, ref component))
+            return;
+
+        component.InsuranceRespawnAvailable = available;
+        component.InsuranceRespawnAt = respawnAt;
+        Dirty(uid, component);
+    }
     }
 
     /// <summary>
@@ -171,4 +181,24 @@ namespace Content.Shared.Ghost
 
     [Serializable, NetSerializable]
     public sealed class GhostReturnToRoundRequest : EntityEventArgs;
+
+[Serializable, NetSerializable]
+public sealed class GhostInsuranceRespawnRequest : EntityEventArgs;
+
+[Serializable, NetSerializable]
+public sealed class GhostInsuranceRespawnStatusEvent : EntityEventArgs
+{
+    public readonly bool Available;
+    public readonly TimeSpan RespawnAt;
+    public readonly bool SpawnMachineBound;
+    public readonly bool SpawnMachinePowered;
+
+    public GhostInsuranceRespawnStatusEvent(bool available, TimeSpan respawnAt, bool spawnMachineBound = true, bool spawnMachinePowered = true)
+    {
+        Available = available;
+        RespawnAt = respawnAt;
+        SpawnMachineBound = spawnMachineBound;
+        SpawnMachinePowered = spawnMachinePowered;
+    }
+}
 }

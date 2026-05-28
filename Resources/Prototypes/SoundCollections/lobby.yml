@@ -2,7 +2,7 @@
   id: LobbyMusic
   files:
     - /Audio/_Crescent/Lobby/leaving.ogg
-    - /Audio/_Crescent/Lobby/cyberpunk.ogg
+    #- /Audio/_Crescent/Lobby/cyberpunk.ogg # Rat-Change: simply ass, doesnt fit the theme.
     - /Audio/_Crescent/Lobby/green-people.ogg
     - /Audio/_Crescent/Lobby/abyss-of-symbol.ogg
     - /Audio/_Crescent/Lobby/receiver-ascension.ogg

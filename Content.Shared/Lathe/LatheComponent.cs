@@ -93,4 +93,19 @@ namespace Content.Shared.Lathe
     /// </summary>
     [ByRefEvent]
     public readonly record struct LatheStartPrintingEvent(LatheRecipePrototype Recipe);
+
+    /// <summary>
+    /// Event fired when a lathe finishes producing an item.
+    /// </summary>
+    public sealed class LatheProduceCompleteEvent : EntityEventArgs
+    {
+        public EntityUid Lathe;
+        public LatheRecipePrototype Recipe;
+
+        public LatheProduceCompleteEvent(EntityUid lathe, LatheRecipePrototype recipe)
+        {
+            Lathe = lathe;
+            Recipe = recipe;
+        }
+    }
 }

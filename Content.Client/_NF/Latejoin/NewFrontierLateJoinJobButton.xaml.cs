@@ -49,7 +49,7 @@ public sealed partial class NewFrontierLateJoinJobButton : Button
         JobIcon.Texture = jobIcon.Icon.Frame0();
 
 
-        JobText.Text = $"{prototype.LocalizedName} ({obj[_station][_jobId]?.ToString() ?? "Unlimited"})";
+        JobText.Text = $"{prototype.LocalizedName} ({obj[_station][_jobId]?.ToString() ?? Loc.GetString("late-join-unlimited")})";
 
         Disabled = obj[_station][_jobId] == 0;
     }

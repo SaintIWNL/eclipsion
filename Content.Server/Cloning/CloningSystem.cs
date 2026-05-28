@@ -9,7 +9,9 @@ using Content.Server.Humanoid;
 using Content.Server.Jobs;
 using Content.Server.Materials;
 using Content.Server.Popups;
+using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Power.EntitySystems;
+using Content.Server.Traits;
 using Content.Shared.Silicon.Components; // Goobstation
 using Content.Shared.Atmos;
 using Content.Shared.CCVar;
@@ -47,6 +49,7 @@ using Content.Server.Power.Components;
 using Content.Shared.Drunk;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Power;
+using Content.Shared._Rat.Cloning;
 
 
 namespace Content.Server.Cloning;
@@ -83,6 +86,8 @@ public sealed partial class CloningSystem : EntitySystem
     [Dependency] private readonly ThirstSystem _thirst = default!;
     [Dependency] private readonly SharedDrunkSystem _drunk = default!;
     [Dependency] private readonly MobThresholdSystem _thresholds = default!;
+    [Dependency] private readonly TraitSystem _traitSystem = default!;
+    [Dependency] private readonly PlayTimeTrackingManager _playTimeTracking = default!;
     public readonly Dictionary<MindComponent, EntityUid> ClonesWaitingForMind = new();
 
     // <summary>
@@ -225,7 +230,9 @@ public sealed partial class CloningSystem : EntitySystem
         if (CheckGeneticDamage(uid, bodyToClone, clonePod, out var geneticDamage, failChanceModifier))
             return true;
 
-        var mob = FetchAndSpawnMob(uid, clonePod, pref, speciesPrototype, humanoid, bodyToClone, geneticDamage);
+        var mob = FetchAndSpawnMob(uid, clonePod, pref, speciesPrototype, humanoid, bodyToClone, geneticDamage, mindEnt.Owner);
+        var organMarking = new CloneBodySpawnedForOrganMarkingEvent();
+        RaiseLocalEvent(mob, ref organMarking);
         var ev = new CloningEvent(bodyToClone, mob);
         RaiseLocalEvent(bodyToClone, ref ev);
 
@@ -296,7 +303,8 @@ public sealed partial class CloningSystem : EntitySystem
         SpeciesPrototype speciesPrototype,
         HumanoidAppearanceComponent humanoid,
         EntityUid bodyToClone,
-        float geneticDamage
+        float geneticDamage,
+        EntityUid mindId
     )
     {
         List<Sex> sexes = new();
@@ -340,6 +348,7 @@ public sealed partial class CloningSystem : EntitySystem
         UpdateGrammar(mob, gender);
         CleanupCloneComponents(mob, bodyToClone, forceOldProfile, clonePodComp.DoMetempsychosis);
         UpdateHungerAndThirst(mob, clonePodComp);
+        ApplyTraitsToClone(mob, humanoid, mindId);
 
         return mob;
     }

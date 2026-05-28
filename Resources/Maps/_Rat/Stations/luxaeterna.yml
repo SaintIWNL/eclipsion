@@ -92201,7 +92201,7 @@ entities:
       parent: 1
     - type: Physics
       canCollide: True
-      bodyType: Dynamic
+      bodyType: Static
     - type: AtmosPipeColor
       color: '#990000FF'
   - uid: 10814

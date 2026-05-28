@@ -19,6 +19,9 @@ public sealed partial class HTNComponent : NPCComponent
     [DataField("checkServices")]
     public bool CheckServices = true;
 
+    [ViewVariables]
+    public readonly Dictionary<string, float> ServiceCooldowns = new();
+
     /// <summary>
     /// The NPC's current plan.
     /// </summary>
@@ -54,4 +57,9 @@ public sealed partial class HTNComponent : NPCComponent
     /// </summary>
     [DataField]
     public bool Enabled = true;
+
+    // Rat-start
+    [DataField]  
+    public float? SleepPlayerCheckRangeOverride = null;  
+    // Rat-end  
 }

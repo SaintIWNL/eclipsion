@@ -20,6 +20,8 @@ public sealed class WorldControllerSystem : EntitySystem
     [Dependency] private readonly MetaDataSystem _metaData = default!;
 
     private const int PlayerLoadRadius = 2;
+    private float _updateTimer = 0f;
+    private const float UpdateInterval = 2f;
 
     private ISawmill _sawmill = default!;
 
@@ -84,6 +86,11 @@ public sealed class WorldControllerSystem : EntitySystem
     /// <inheritdoc />
     public override void Update(float frameTime)
     {
+        _updateTimer += frameTime;
+        if (_updateTimer < UpdateInterval)
+            return;
+        _updateTimer = 0f;
+
         //there was a to-do here about every frame alloc but it turns out it's a nothing burger here.
         var chunksToLoad = new Dictionary<EntityUid, Dictionary<Vector2i, List<EntityUid>>>();
 
@@ -215,6 +222,11 @@ public sealed class WorldControllerSystem : EntitySystem
     {
         if (!Resolve(map, ref controller))
             throw new Exception($"Tried to use {ToPrettyString(map)} as a world map, without actually being one.");
+
+		// Rat-start
+        if (Math.Abs(chunk.X) > 40 || Math.Abs(chunk.Y) > 40)
+            return null;
+		// Rat-end
 
         if (controller.Chunks.TryGetValue(chunk, out var ent))
             return ent;

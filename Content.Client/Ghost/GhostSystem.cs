@@ -1,5 +1,6 @@
 using Content.Client.Movement.Systems;
 using Content.Shared.Actions;
+using Content.Shared.GameTicking;
 using Content.Shared.Ghost;
 using Robust.Client.Console;
 using Robust.Client.GameObjects;
@@ -17,6 +18,10 @@ namespace Content.Client.Ghost
         [Dependency] private readonly ContentEyeSystem _contentEye = default!;
 
         public int AvailableGhostRoleCount { get; private set; }
+        public bool InsuranceRespawnAvailable { get; private set; }
+        public TimeSpan InsuranceRespawnAt { get; private set; } = TimeSpan.Zero;
+        public bool InsuranceSpawnMachineBound { get; private set; } = true;
+        public bool InsuranceSpawnMachinePowered { get; private set; } = true;
 
         private bool _ghostVisibility = true;
 
@@ -63,6 +68,8 @@ namespace Content.Client.Ghost
 
             SubscribeNetworkEvent<GhostWarpsResponseEvent>(OnGhostWarpsResponse);
             SubscribeNetworkEvent<GhostUpdateGhostRoleCountEvent>(OnUpdateGhostRoleCount);
+            SubscribeNetworkEvent<GhostInsuranceRespawnStatusEvent>(OnInsuranceRespawnStatus);
+            SubscribeNetworkEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
 
             SubscribeLocalEvent<EyeComponent, ToggleLightingActionEvent>(OnToggleLighting);
             SubscribeLocalEvent<EyeComponent, ToggleFoVActionEvent>(OnToggleFoV);
@@ -138,6 +145,11 @@ namespace Content.Client.Ghost
             if (uid != _playerManager.LocalEntity)
                 return;
 
+            InsuranceRespawnAvailable = false;
+            InsuranceRespawnAt = TimeSpan.Zero;
+            InsuranceSpawnMachineBound = true;
+            InsuranceSpawnMachinePowered = true;
+
             GhostVisibility = false;
             PlayerRemoved?.Invoke(component);
         }
@@ -155,6 +167,20 @@ namespace Content.Client.Ghost
 
             if (uid != _playerManager.LocalEntity)
                 return;
+
+            // Replicated GhostComponent carries insurance respawn flags from the server; mirror them here so the
+            // ghost HUD matches even if GhostInsuranceRespawnStatusEvent reorders relative to component state.
+            if (InsuranceRespawnAvailable != component.InsuranceRespawnAvailable
+                || InsuranceRespawnAt != component.InsuranceRespawnAt)
+            {
+                InsuranceRespawnAvailable = component.InsuranceRespawnAvailable;
+                InsuranceRespawnAt = component.InsuranceRespawnAt;
+                if (!component.InsuranceRespawnAvailable)
+                {
+                    InsuranceSpawnMachineBound = true;
+                    InsuranceSpawnMachinePowered = true;
+                }
+            }
 
             PlayerUpdated?.Invoke(component);
         }
@@ -179,6 +205,27 @@ namespace Content.Client.Ghost
         {
             AvailableGhostRoleCount = msg.AvailableGhostRoles;
             GhostRoleCountUpdated?.Invoke(msg);
+        }
+
+        private void OnInsuranceRespawnStatus(GhostInsuranceRespawnStatusEvent msg)
+        {
+            InsuranceRespawnAvailable = msg.Available;
+            InsuranceRespawnAt = msg.RespawnAt;
+            InsuranceSpawnMachineBound = msg.SpawnMachineBound;
+            InsuranceSpawnMachinePowered = msg.SpawnMachinePowered;
+            if (Player != null)
+                PlayerUpdated?.Invoke(Player);
+        }
+
+        /// <summary>
+        /// Clears stale insurance UI between rounds (replacing any attach-based reset that broke ghost visit / return).
+        /// </summary>
+        private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
+        {
+            InsuranceRespawnAvailable = false;
+            InsuranceRespawnAt = TimeSpan.Zero;
+            InsuranceSpawnMachineBound = true;
+            InsuranceSpawnMachinePowered = true;
         }
 
         public void RequestWarps()
@@ -211,6 +258,11 @@ namespace Content.Client.Ghost
         {
             var msg = new GhostReturnToRoundRequest();
             RaiseNetworkEvent(msg);
+        }
+
+        public void UseInsuranceRespawn()
+        {
+            RaiseNetworkEvent(new GhostInsuranceRespawnRequest());
         }
     }
 }
