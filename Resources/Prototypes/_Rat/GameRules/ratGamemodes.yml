@@ -35,8 +35,8 @@
         posY: 1000
         IFFColor: White
         IFFFaction: SHI
-      Refuge:
-        gameMapID: Refuge
+      Castle:
+        gameMapID: Castle
         posX: -3000
         posY: 7000
         IFFColor: Green
@@ -132,8 +132,8 @@
         posY: 1000
         IFFColor: White
         IFFFaction: SHI
-      Refuge:
-        gameMapID: Refuge
+      Castle:
+        gameMapID: Castle
         posX: -3000
         posY: 7000
         IFFColor: Green

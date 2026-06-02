@@ -1,0 +1,33 @@
+- type: gameMap
+  id: Castle
+  mapName: 'Крепость'
+  mapPath: /Maps/_Rat/Stations/castle.yml
+  minPlayers: 0
+  stations:
+    Castle:
+      stationProto: StandardCrescentStation
+      gridComponents:
+        - type: BlockShipWeaponProjectileGrid
+        - type: PreventPilot
+        - type: MapIcon
+          iconType: Station
+      components:
+        - type: VesselIcon
+          iffIcon:
+            sprite: _Crescent/ShipIcons/ifficons.rsi
+            state: outpost
+        - type: StationNameSetup
+          mapNameTemplate: 'OCP Крепость охотников'
+        - type: VesselDesignation
+          designation: vessel-designation-headquarters
+        - type: Grammar
+          attributes:
+            proper: true
+        - type: StationJobs
+          overflowJobs: []
+          availableJobs:
+            OverseerSRM: [ 1, 1 ]
+            MontagneSRM: [ 1, 1 ]
+            HunterSRM: [ 4, 4 ]
+            TenderSRM: [ 1, 1 ]
+            AcolyteSRM: [ 5, 5 ]
