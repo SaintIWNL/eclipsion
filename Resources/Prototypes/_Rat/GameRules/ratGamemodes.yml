@@ -67,6 +67,18 @@
         gameMapID: RatFakel
         posX: 0
         posY: 0
+      RatBuran:
+        gameMapID: RatBuran
+        posX: -2500
+        posY: 3500
+      RatKovf:
+        gameMapID: RatKovf
+        posX: 500
+        posY: -4300
+      RatResearchLabratory:
+        gameMapID: RatResearchLabratory
+        posX: -2000
+        posY: 2000
 
 - type: gamePreset
   id: RatAdventureFreeport
