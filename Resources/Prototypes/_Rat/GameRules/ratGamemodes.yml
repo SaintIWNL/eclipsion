@@ -3,9 +3,9 @@
   alias:
   - adventure
   - ratadventure
-  name: Свободная игра
+  name: Freeplay
   showInVote: true
-  description: Последние дни Тайпана. Длится 2-4 часа.
+  description: The final hours of Taypan. Last 24 hours.
   rules:
   - RatAdventure
   - HullrotEventScheduler
@@ -35,14 +35,6 @@
         posY: 1000
         IFFColor: White
         IFFFaction: SHI
-      Refuge:
-        gameMapID: Refuge
-        posX: -3000
-        posY: 7000
-        IFFColor: Green
-        IFFFaction: SRM
-        randomOffsetX: 2000
-        randomOffsetY: 2000
       Dochenskaya:
         gameMapID: Dochenskaya
         posX: 6000
@@ -67,14 +59,6 @@
         posY: -4000
         IFFColor: IndianRed
         IFFFaction: TFSC
-      TribalHideout:
-        gameMapID: TribalHideout
-        posX: 2000
-        posY: -7000
-        IFFColor: White
-        IFFFaction: TAP
-        randomOffsetX: 2000
-        randomOffsetY: 2000
       IronRing:
         gameMapID: IronRing
         posX: -3000
@@ -83,18 +67,6 @@
         gameMapID: RatFakel
         posX: 0
         posY: 0
-      RatBuran:
-        gameMapID: RatBuran
-        posX: -2500
-        posY: 3500
-      RatKovf:
-        gameMapID: RatKovf
-        posX: 500
-        posY: -4300
-      RatResearchLabratory:
-        gameMapID: RatResearchLabratory
-        posX: -2000
-        posY: 2000
 
 - type: gamePreset
   id: RatAdventureFreeport
