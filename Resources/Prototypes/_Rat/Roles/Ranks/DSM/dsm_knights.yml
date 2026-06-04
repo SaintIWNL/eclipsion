@@ -2,19 +2,19 @@
 - type: rank
   id: RatRankKnightLead
   name: Knight Grandmaster
-  prefix: Sir
+  prefix: High Knight
   paygrade: K4
 
 - type: rank
   id: RatRankKnightSenior
   name: Knight Master
-  prefix: Sir
+  prefix: Master Knight
   paygrade: K3
 
 - type: rank
   id: RatRankKnightMiddle
   name: Knight Banneret
-  prefix: Sir
+  prefix: Sire
   paygrade: K2
 
 - type: rank
