@@ -46,6 +46,7 @@ public sealed class AnomalyStationRule : StationEventSystem<AnomalyStationRuleCo
                 ("y", (int)component.Coordinates.Y)),
             colorOverride: Color.DeepPink);
     }
+
     protected override void Started(EntityUid uid,
      AnomalyStationRuleComponent comp, GameRuleComponent gameRule,
      GameRuleStartedEvent args)
@@ -54,6 +55,7 @@ public sealed class AnomalyStationRule : StationEventSystem<AnomalyStationRuleCo
 
         SpawnAnomalyStation(comp);
     }
+
     private void SpawnAnomalyStation(AnomalyStationRuleComponent comp)
     {
         MapId map = _gameTicker.DefaultMap;
@@ -63,9 +65,17 @@ public sealed class AnomalyStationRule : StationEventSystem<AnomalyStationRuleCo
         {
             if (grid is null) return;
 
-            for (int i = 0; i < 4; i++)
+            int amountToSpawn = 4;
+
+            for (int i = 0; i < amountToSpawn; i++)
             {
-                _anomaly.SpawnOnRandomGridLocation(grid.Value, comp.AnomalySpawnerPrototype);
+                if (!TryFindRandomTile(out _, out _, out _, out var coords))
+                    return;
+
+                Spawn(comp.ArtifactSpawnerPrototype, coords);
+                Spawn(comp.ArtifactFlashPrototype, coords);
+
+                Sawmill.Info($"Spawning random artifact at {coords}");
             }
         }
 
