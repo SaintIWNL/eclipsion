@@ -5,7 +5,7 @@
   - ratadventure
   name: Freeplay
   showInVote: true
-  description: The final hours of Taypan. Last 24 hours.
+  description: The final hours of Taypan. Last 2-4 hours.
   rules:
   - RatAdventure
   - HullrotEventScheduler
@@ -80,9 +80,9 @@
   id: RatAdventureFreeport
   alias:
   - ratadventurefreeport
-  name: Свободная игра (Фрипорт)
+  name: Free Play (Freeport)
   showInVote: true
-  description: Последние дни Тайпана. Длится 2-4 часа.
+  description: The final hours of Taypan. Last 2-4 hours.
   rules:
   - RatAdventureFreeport
   - HullrotEventScheduler
@@ -159,9 +159,9 @@
   id: RatAdventureWar
   alias:
   - ratwar
-  name: ЛРНП vs БМС
+  name: NCWL vs DSM
   showInVote: true
-  description: Последние дни Тайпана. Длится 2-4 часа.
+  description: The final hours of Taypan. Last 2-4 hours.
   rules:
   - RatAdventureWar
   - HullrotEventScheduler
