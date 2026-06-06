@@ -17,7 +17,7 @@
           iconType: Station
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'ТПШ Татсумо'
+          mapNameTemplate: 'ТПШ Татсумото'
         - type: VesselDesignation
           designation: vessel-designation-headquarters
         - type: VesselDescription
