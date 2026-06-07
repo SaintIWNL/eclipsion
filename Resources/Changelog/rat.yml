@@ -1064,5 +1064,16 @@ Entries:
     id: 127
     time: '2026-06-06T15:23:19.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/271
+  - author: ChangelingRUES
+    changes:
+      - type: Tweak
+        message: Станция ОСР получила мелкие фиксы, навроде исправление мусорных труб, добавление ХимВенда, морга с крематорием и т.д.
+      - type: Tweak
+        message: Станция КД Бублик получила консоль связи для оповещений.
+      - type: Fix
+        message: Исправлено название станции ТПШ, Татсумо снова стала Татсумото.
+    id: 128
+    time: '2026-06-07T11:07:15.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/270
 Name: Rat
 Order: -1
