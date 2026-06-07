@@ -1075,5 +1075,12 @@ Entries:
     id: 128
     time: '2026-06-07T11:07:15.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/270
+  - author: ChangelingRUES
+    changes:
+      - type: Fix
+        message: Станции ОСР дочинили всю проводку.
+    id: 129
+    time: '2026-06-07T15:49:13.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/273
 Name: Rat
 Order: -1
