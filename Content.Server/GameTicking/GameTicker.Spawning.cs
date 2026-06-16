@@ -251,15 +251,7 @@ namespace Content.Server.GameTicking
 
             _playTimeTrackings.PlayerRolesChanged(player);
 
-            var spawnPointType = !lateJoin && jobPrototype.AlwaysUseSpawner
-                ? SpawnPointType.Job
-                : SpawnPointType.Unset;
-
-            var mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(
-                station,
-                jobId,
-                character,
-                spawnPointType: spawnPointType);
+            var mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(station, jobId, character);
             DebugTools.AssertNotNull(mobMaybe);
             var mob = mobMaybe!.Value;
 

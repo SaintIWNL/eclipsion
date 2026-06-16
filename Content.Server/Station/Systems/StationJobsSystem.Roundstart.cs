@@ -161,7 +161,7 @@ public sealed partial class StationJobsSystem
                     // Get all of the jobs in the selected weight category.
                     foreach (var (job, slot) in stationJobs[station])
                     {
-                        if (_jobsByWeight[weight].Contains(job) && jobPlayerOptions.ContainsKey(job))
+                        if (_jobsByWeight[weight].Contains(job))
                             slots.Add(job, slot);
                     }
                 }
@@ -209,8 +209,7 @@ public sealed partial class StationJobsSystem
                 // We do this by simply selecting a station randomly and giving it the remaining share(s).
                 if (distributed < candidates.Count)
                 {
-                    var viableStations = stations.Where(station => stationTotalSlots[station] > 0).ToList();
-                    var choice = _random.Pick(viableStations);
+                    var choice = _random.Pick(stations);
                     stationShares[choice] += candidates.Count - distributed;
                 }
 
