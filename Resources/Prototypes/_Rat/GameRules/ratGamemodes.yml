@@ -224,3 +224,72 @@
         gameMapID: Planetfall
         posX: 0 
         posY: 0
+
+- type: gamePreset
+  id: RatAdventureWarSHI
+  alias:
+  - ratwarshi
+  - ratshiw
+  name: Freeplay (SHI vs TFSC)
+  showInVote: true
+  description: Brutal war between corporations. Last 2-4 hours.
+  rules:
+  - RatAdventureWarSHI
+  - HullrotEventScheduler
+
+- type: entity
+  id: RatAdventureWarSHI
+  parent: BaseGameRule
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: AdventureRule
+    gameMapsByID:
+      Tatsumoto:
+        gameMapID: Tatsumoto
+        posX: -5000
+        posY: 0
+        IFFColor: White
+        IFFFaction: SHI
+
+      Dochenskaya:
+        gameMapID: Dochenskaya
+        posX: 5000
+        posY: 0
+        IFFColor: IndianRed
+        IFFFaction: TFSC
+
+      Jackal:
+        gameMapID: Jackal
+        posX: 5000
+        posY: 500
+        IFFColor: IndianRed
+        IFFFaction: TFSC
+
+      Dawnbreaker:
+        gameMapID: Dawnbreaker
+        posX: 5000
+        posY: -500
+        IFFColor: IndianRed
+        IFFFaction: TFSC
+
+      Hayes:
+        gameMapID: Hayes
+        posX: 5500
+        posY: 0
+        IFFColor: IndianRed
+        IFFFaction: TFSC
+
+      RatFakel:
+        gameMapID: RatFakel
+        posX: 0
+        posY: 0
+
+      RatBuran:
+        gameMapID: RatBuran
+        posX: -3000
+        posY: 3000
+
+      RatKovf:
+        gameMapID: RatKovf
+        posX: 3000
+        posY: -3000
