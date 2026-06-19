@@ -1091,5 +1091,12 @@ Entries:
     id: 130
     time: '2026-06-16T18:23:05.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/278
+  - author: ChangelingRUES
+    changes:
+      - type: Tweak
+        message: Изменены кораблики под РНД нужды
+    id: 131
+    time: '2026-06-19T15:09:39.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/279
 Name: Rat
 Order: -1
