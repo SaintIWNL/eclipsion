@@ -111,7 +111,7 @@
     gloves: ClothingHandsGlovesNCWLAdmiralParade
     head: ClothingHeadHatNCWLBeretAdmiral
     mask: ClothingMaskNCWLGasmask
-    ears: ClothingHeadsetNCWL
+    ears: ClothingHeadsetNCWLCommand
     eyes: ClothingEyesHudSecurity
     back: ClothingBackpackNCWL
   storage:

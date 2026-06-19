@@ -9,3 +9,6 @@ ent-ClothingHeadsetNCSPCyberdawnCommand = гарнитура патриарха 
 
 ent-ClothingHeadsetNCSPSawsCommand = гарнитура бригадира
     .desc = Для коммуникации с братьями по оружию.
+
+ent-ClothingHeadsetNCWLCommand = гарнитура командования ЛРНП
+    .desc = Для коммуникации с вашими товарищами.

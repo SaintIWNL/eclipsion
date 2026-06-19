@@ -113,6 +113,6 @@
     gloves: ClothingHandsGlovesCombat
     head: ClothingHeadHatNCWLKommissarHat
     mask: ClothingMaskNCWLGasmask
-    ears: ClothingHeadsetNCWL
+    ears: ClothingHeadsetNCWLCommand
     eyes: ClothingEyesHudSecurity
     pocket1: RatRubberStampNCWLComissar

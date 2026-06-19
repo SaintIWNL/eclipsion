@@ -5,6 +5,13 @@
   frequency: 1985
   color: "#bf4d00"
 
+- type: radioChannel
+  id: NCWLCommand
+  name: chat-radio-ncwlcommand
+  keycode: 'п'
+  frequency: 3483
+  color: "#d66113"
+  longRange: true
 
 - type: radioChannel
   id: Imperial

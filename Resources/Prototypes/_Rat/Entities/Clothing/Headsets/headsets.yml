@@ -65,3 +65,19 @@
       sprite: Clothing/Ears/Headsets/base_syndicate.rsi
     - type: Clothing
       sprite: Clothing/Ears/Headsets/base_syndicate.rsi
+
+- type: entity
+  parent: ClothingHeadset
+  id: ClothingHeadsetNCWLCommand
+  name: union headset
+  description: To communicate with your comrades.
+  components:
+    - type: ContainerFill
+      containers:
+        key_slots:
+          - EncryptionKeyNCWLCommand
+          - EncryptionKeyTraffic
+    - type: Sprite
+      sprite: _Crescent/Clothing/Headsets/ncwl.rsi
+    - type: Clothing
+      sprite: _Crescent/Clothing/Headsets/ncwl.rsi
