@@ -61,13 +61,9 @@ public sealed class ShipyardConsoleSystem : SharedShipyardConsoleSystem
         }
 
         if (!string.IsNullOrWhiteSpace(customName))
-        {
-            _meta.SetEntityName(shuttle, $"{vessel.Name} - {customName}");
-        }
+         _meta.SetEntityName(shuttle, $"{vessel.Name} - {customName}");
         else
-        {
-            _meta.SetEntityName(shuttle, $"{vessel.Name} {_random.Next(1000):000}");
-        }
+         _meta.SetEntityName(shuttle, $"{vessel.Name} {_random.Next(1000):000}");
 
         _cargo.UpdateBankAccount(bank, bank.Comp, -vesselPrice);
 
