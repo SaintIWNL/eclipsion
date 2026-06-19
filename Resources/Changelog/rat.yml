@@ -1082,5 +1082,14 @@ Entries:
     id: 129
     time: '2026-06-07T15:49:13.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/273
+  - author: ReWAFFlution
+    changes:
+      - type: Add
+        message: Добавлена озвучка радио
+      - type: Remove
+        message: Убрана озвучка непонятного из-за языка текста
+    id: 130
+    time: '2026-06-16T18:23:05.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/278
 Name: Rat
 Order: -1
