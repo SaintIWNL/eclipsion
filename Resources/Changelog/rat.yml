@@ -1098,5 +1098,21 @@ Entries:
     id: 131
     time: '2026-06-19T15:09:39.0000000+00:00'
     url: https://github.com/ss14-art/ratgore/pull/279
+  - author: Gorox
+    changes:
+      - type: Add
+        message: Добавлены цвета и выделения в рации для всех фракций.
+      - type: Add
+        message: Добавлен командный канал связи КВСТ.
+    id: 132
+    time: '2026-06-20T17:08:53.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/281
+  - author: Gr-avity
+    changes:
+      - type: Tweak
+        message: Изменён овервотч (он кому-то нужен?)
+    id: 133
+    time: '2026-06-20T17:09:18.0000000+00:00'
+    url: https://github.com/ss14-art/ratgore/pull/282
 Name: Rat
 Order: -1
