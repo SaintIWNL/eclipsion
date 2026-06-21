@@ -102,7 +102,7 @@ stock-market-refresh = Refresh
 stock-market-no-portfolio = You don't own any stocks yet
 stock-market-price-up = [color=lime]UP[/color]
 stock-market-price-down = [color=red]DOWN[/color]
-stock-company-tpsh = TPSH
-stock-company-kvst = KVST
-stock-company-bms = BMS
-stock-company-lrnp = LRNP
+stock-company-shi = SHI
+stock-company-tfsc = TFSC
+stock-company-dsm = DSM
+stock-company-ncwl = NCWL

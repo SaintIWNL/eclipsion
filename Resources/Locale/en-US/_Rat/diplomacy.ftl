@@ -43,13 +43,13 @@ diplomacy-announce-peace-rejected = [DIPLOMACY] { $to } rejected peace proposal 
 diplomacy-announce-alliance-rejected = [DIPLOMACY] { $to } rejected alliance proposal from { $from }.
 diplomacy-announce-trade-rejected = [DIPLOMACY] { $to } rejected trade proposal from { $from }.
 
-diplomacy-faction-DSM = BMS
-diplomacy-faction-NCWL = LRNP
+diplomacy-faction-DSM = DSM
+diplomacy-faction-NCWL = NCWL
 diplomacy-faction-SHI = SHI
 diplomacy-faction-SRM = SRM
 diplomacy-faction-TAP = TAP
 diplomacy-faction-IPM = IPM
-diplomacy-faction-SAW = SOP
+diplomacy-faction-SAW = SAW
 diplomacy-faction-GSC = GSC
 diplomacy-faction-CD = CD
 diplomacy-faction-TSP = TSP

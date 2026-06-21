@@ -31,10 +31,10 @@ public sealed class StockCompanySystem : EntitySystem
         _initialized = true;
 
         _companies.Clear();
-        _companies.Add(new StockCompanyData("stock-company-tpsh", 500f));
-        _companies.Add(new StockCompanyData("stock-company-kvst", 400f));
-        _companies.Add(new StockCompanyData("stock-company-bms", 350f));
-        _companies.Add(new StockCompanyData("stock-company-lrnp", 250f));
+        _companies.Add(new StockCompanyData("stock-company-shi", 500f));
+        _companies.Add(new StockCompanyData("stock-company-tfsc", 400f));
+        _companies.Add(new StockCompanyData("stock-company-dsm", 350f));
+        _companies.Add(new StockCompanyData("stock-company-ncwl", 250f));
     }
 
     public override void Update(float frameTime)
