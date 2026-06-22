@@ -1002,46 +1002,53 @@
 - type: vendingMachineInventory
   id: NCWLConscriptAmmoInventory
   startingInventory:
-    WeaponSniperNCWLNovomosin: 100
-    WeaponPistolComrade: 20
+    WeaponSniperNCWLNovomosin: 30
     BoxSpeedLoaderRifle: 50
-    MagazinePistolSubMachineGun: 12
-    BoxRoundsAntiMateriel: 1
-    BoxLethalshot: 10
-    MagazineMagnum: 12
+    WeaponPistolComrade: 30
     MagazinePistol: 50
+    WeaponAntimaterielNCWLHayha: 2
+    BoxRoundsAntiMateriel: 4
+    WeaponShotgunKammerer: 2
+    BoxLethalshot: 4
+    WeaponHPSterilizerFlamethrower: 2
+    KukriKnife: 100
 
 - type: vendingMachineInventory
   id: DSMConscriptAmmoInventory
   startingInventory:
-    WeaponSniperDSMLegax: 100
-    WeaponPistolComplianceImperial: 20
+    WeaponSniperDSMLegax: 30
     MagazineBoxLightRifleSurplus: 50
-    MagazinePistolSubMachineGun: 12
-    BoxRoundsAntiMateriel: 1
-    BoxLethalshot: 10
-    MagazineMagnum: 12
-    MagazinePistol: 50
+    WeaponPistolComplianceImperial: 20
+    WeaponAntimaterielDSMLeveller: 2
+    BoxRoundsAntiMateriel: 4
+    WeaponShotgunKammerer: 2
+    BoxLethalshot: 4
+    WeaponHPSterilizerFlamethrower: 2
+    KukriKnife: 100
 
 - type: vendingMachineInventory
   id: NCWLConscriptGearInventory
   startingInventory:
     C4: 100
     JetpackBlackFilled: 100
-    GrenadeFlashBang: 5
+    GrenadeFlashBang: 100
     DoubleEmergencyOxygenTankFilled: 100
-    ClothingHeadHelmetNCWLBasic: 100
-    ClothingOuterArmorNCWLHeavyCarapace: 100
+    HandHeldMassScannerEE: 100
+    WeaponFlareGun: 10
+    BoxFlare: 100
+    VoidsuitKitNCWL: 100
 
 - type: vendingMachineInventory
   id: DSMConscriptGearInventory
   startingInventory:
     C4: 100
-    JetpackBlackFilled: 10
-    GrenadeFlashBang: 5
+    JetpackBlackFilled: 100
+    GrenadeFlashBang: 100
     DoubleEmergencyOxygenTankFilled: 100
-    ClothingHeadHelmetImperialTrooperHelmet: 100
-    ClothingOuterArmorImperialTrooperArmor: 100
+    HandHeldMassScannerEE: 100
+    WeaponFlareGun: 10
+    BoxFlare: 100
+    VoidsuitKitDSM: 100
 
 - type: vendingMachineInventory
   id: NCWLConscriptShipInventory
@@ -1055,7 +1062,7 @@
 - type: vendingMachineInventory
   id: DSMConscriptShipInventory
   startingInventory:
-    ShipVoucherUnionfallIbis: 2
+    ShipVoucherUnionfallIbis: 4
     ShipVoucherUnionfallSaintsfall: 2
     ShipVoucherUnionfallImparator: 2
     ShipVoucherUnionfallConquest: 20
