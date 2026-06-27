@@ -1019,6 +1019,7 @@
     WeaponSniperDSMLegax: 30
     MagazineBoxLightRifleSurplus: 50
     WeaponPistolComplianceImperial: 20
+    MagazinePistol: 50
     WeaponAntimaterielDSMLeveller: 2
     BoxRoundsAntiMateriel: 4
     WeaponShotgunKammerer: 2
@@ -1034,7 +1035,6 @@
     GrenadeFlashBang: 100
     DoubleEmergencyOxygenTankFilled: 100
     HandHeldMassScannerEE: 100
-    WeaponFlareGun: 10
     BoxFlare: 100
     VoidsuitKitNCWL: 100
 
@@ -1046,7 +1046,6 @@
     GrenadeFlashBang: 100
     DoubleEmergencyOxygenTankFilled: 100
     HandHeldMassScannerEE: 100
-    WeaponFlareGun: 10
     BoxFlare: 100
     VoidsuitKitDSM: 100
 
