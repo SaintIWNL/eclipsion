@@ -3,15 +3,11 @@
   name: Olywier
   description: job-description-governor
   playTimeTracker: JobGovernorDSM
-  ranks:
-    RatRankNobleEmperor: []
-    RatRankNobleArchduke: []
-    RatRankNobleGrandDuke: []
   weight: 100
   startingGear: planetfall_governor_gear
   alwaysUseSpawner: true
   requireAdminNotify: true
-  whitelisted: true # Rat
+  whitelisted: false
   icon: "JobIconImperialGovernor"
   chatNameColor: "#ffd000"
   chatAmplification:
@@ -27,6 +23,8 @@
     - !type:CharacterSpeciesRequirement
       species:
         - Human
+    - !type:CharacterOverallTimeRequirement
+      min: 100000
     - !type:SexRequirement
       sex : Male
     - !type:CharacterTraitRequirement

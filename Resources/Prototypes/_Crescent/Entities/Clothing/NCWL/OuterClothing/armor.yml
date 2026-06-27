@@ -14,11 +14,11 @@
     armorRepair: HomelandAlloy
     initialModifiers:
       flatReductions:
-        Blunt: 10
-        Slash: 10
-        Piercing: 35
-        Heat: 15
-        Caustic: 15
+        Blunt: 25
+        Slash: 25
+        Piercing: 65
+        Heat: 25
+        Caustic: 25
   - type: ClothingSpeedModifier
     walkModifier: 1.0
     sprintModifier: 1.0
@@ -241,10 +241,10 @@
     armorRepair: Kevlar
     initialModifiers:
       flatReductions:
-        Blunt: 15
-        Slash: 15
-        Piercing: 45
-        Heat: 15
+        Blunt: 25
+        Slash: 25
+        Piercing: 65
+        Heat: 25
         Caustic: 25
   - type: ClothingSpeedModifier
     walkModifier: 1.0

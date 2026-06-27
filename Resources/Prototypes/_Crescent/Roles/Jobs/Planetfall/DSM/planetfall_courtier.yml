@@ -3,28 +3,6 @@
   name: job-name-courtier
   description: job-description-courtier
   playTimeTracker: JobCourtierDSM
-  ranks:
-    RatRankNobleDuke:
-    - !type:CharacterPlaytimeRequirement
-      tracker: JobCourtierDSM
-      min: 180000 # 50 hours
-    RatRankNobleMarquis:
-    - !type:CharacterPlaytimeRequirement
-      tracker: JobCourtierDSM
-      min: 144000 # 40 hours
-    RatRankNobleCount:
-    - !type:CharacterPlaytimeRequirement
-      tracker: JobCourtierDSM
-      min: 108000 # 30 hours
-    RatRankNobleViscount:
-    - !type:CharacterPlaytimeRequirement
-      tracker: JobCourtierDSM
-      min: 72000 # 20 hours
-    RatRankNobleBaron:
-    - !type:CharacterPlaytimeRequirement
-      tracker: JobCourtierDSM
-      min: 36000 # 10 hours
-    RatRankNoblePatrician: []
   weight: 52
   startingGear: planetfall_courtier_gear
   alwaysUseSpawner: true

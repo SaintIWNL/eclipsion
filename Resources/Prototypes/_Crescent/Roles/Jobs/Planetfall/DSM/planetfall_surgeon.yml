@@ -3,16 +3,6 @@
   name: job-name-surgeon
   description: job-description-surgeon
   playTimeTracker: JobSurgeonDSM
-  ranks:
-    RatRankFreeholderSenior:
-    - !type:CharacterPlaytimeRequirement
-      tracker: JobSurgeonDSM
-      min: 72000 # 20 hours
-    RatRankFreeholderMiddle:
-    - !type:CharacterPlaytimeRequirement
-      tracker: JobSurgeonDSM
-      min: 36000 # 10 hours
-    RatRankFreeholderJunior: []
   weight: 2
   startingGear: planetfall_surgeon_gear
   alwaysUseSpawner: true

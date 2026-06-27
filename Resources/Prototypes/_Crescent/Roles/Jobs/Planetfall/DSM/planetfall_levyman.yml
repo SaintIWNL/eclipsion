@@ -3,12 +3,6 @@
   name: job-name-levyman
   description: job-description-levyman
   playTimeTracker: JobLevymanDSM
-  ranks:
-    RatRankLevymanHead: []
-    RatRankLevymanLead: []
-    RatRankLevymanSenior: []
-    RatRankLevymanMiddle: []
-    RatRankLevymanJunior: []
   weight: 4
   startingGear: planetfall_levyman_gear
   alwaysUseSpawner: true

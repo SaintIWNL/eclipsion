@@ -3,10 +3,6 @@
   name: job-name-freeholder
   description: job-description-freeholder
   playTimeTracker: JobFreeholderDSM
-  ranks:
-    RatRankFreeholderSenior: []
-    RatRankFreeholderMiddle: []
-    RatRankFreeholderJunior: []
   weight: 1
   startingGear: planetfall_freeholder_gear
   alwaysUseSpawner: true
