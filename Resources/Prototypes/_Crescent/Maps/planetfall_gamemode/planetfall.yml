@@ -16,6 +16,13 @@
           designation: vessel-designation-headquarters
         - type: VesselDescription
           description: Olywier's fiefdom planet.
+        - type: StationBiome
+          biome: Grasslands
+          biomeLayers: []
+          dungeons: []
+          seed: 8675309
+          mapLightColor: '#D8B059'
+          enableLightCycle: false
         - type: StationJobs
           overflowJobs: []
           availableJobs:
